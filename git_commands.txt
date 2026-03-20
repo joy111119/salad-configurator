@@ -1,0 +1,177 @@
+##Most important ones
+git clone <repo-url> 👉 Downloads a project from a remote repository (e.g., GitHub) to your computer.
+git checkout -b <branch-name> 👉 Creates a new branch and switches to it immediately.
+
+git add .
+git commitv-m <commit-message> 
+git push origin <branch-name> 👉 Uploads your branch to the remote repository.
+
+git checkout main
+git pull origin main 👉 Updates your local main with the newest remote changes.
+
+More command with full description
+
+# 🧱 1. Setup & Configuration
+
+These are used once when you first install Git.
+
+* `git config --global user.name "Your Name"`
+  → Sets your name for commits.
+
+* `git config --global user.email "you@example.com"`
+  → Sets your email.
+
+* `git config --list`
+  → Shows your current Git configuration.
+
+---
+
+# 📁 2. Creating & Getting Repositories
+
+* `git init`
+  → Initializes a new Git repository in your current folder.
+
+* `git clone <repo-url>`
+  → Downloads a repository from somewhere (like GitHub).
+
+---
+
+# 📌 3. Checking Status & History
+
+* `git status`
+  → Shows current state (modified files, staged files, etc.).
+
+* `git log`
+  → Shows commit history.
+
+* `git log --oneline`
+  → Compact version of commit history.
+
+* `git diff`
+  → Shows changes in files (not staged yet).
+
+---
+
+# ➕ 4. Adding & Committing Changes
+
+* `git add <file>`
+  → Adds a file to the staging area.
+
+* `git add .`
+  → Adds all changes in the current folder.
+
+* `git commit -m "message"`
+  → Saves changes with a message.
+
+---
+
+# 🔄 5. Working with Branches
+
+* `git branch`
+  → Lists all branches.
+
+* `git branch <branch-name>`
+  → Creates a new branch.
+
+* `git checkout <branch-name>`
+  → Switches to another branch.
+
+* `git checkout -b <branch-name>`
+  → Creates and switches to a new branch.
+
+* `git merge <branch-name>`
+  → Merges another branch into the current one.
+
+* `git branch -d <branch-name>`
+  → Deletes a branch.
+
+---
+
+# 🌐 6. Working with Remote Repositories
+
+* `git remote -v`
+  → Shows linked remote repositories.
+
+* `git remote add origin <url>`
+  → Links your local repo to a remote.
+
+* `git push origin <branch>`
+  → Uploads changes to remote.
+
+* `git pull`
+  → Fetches and merges changes from remote.
+
+* `git fetch`
+  → Downloads changes but does NOT merge.
+
+---
+
+# ⏪ 7. Undoing Changes
+
+* `git restore <file>`
+  → Discards changes in a file (not staged).
+
+* `git reset <file>`
+  → Unstages a file.
+
+* `git reset --hard`
+  → Resets everything (⚠️ deletes changes).
+
+* `git revert <commit>`
+  → Creates a new commit that undoes a previous one.
+
+---
+
+# 📦 8. Stashing (Temporary Save)
+
+* `git stash`
+  → Saves changes temporarily.
+
+* `git stash pop`
+  → Restores saved changes.
+
+* `git stash list`
+  → Shows saved stashes.
+
+---
+
+# 🔍 9. Viewing Info
+
+* `git show`
+  → Shows details of a commit.
+
+* `git blame <file>`
+  → Shows who changed each line of a file.
+
+---
+
+# ⚡ Most Common Daily Workflow
+
+A typical workflow looks like:
+
+```bash
+git status
+git add .
+git commit -m "your message"
+git push
+```
+
+---
+
+# 🧠 Tips
+
+* Think of Git in 3 areas:
+
+  1. **Working directory** (your files)
+  2. **Staging area** (`git add`)
+  3. **Repository** (`git commit`)
+
+* Use `git status` a LOT — it’s your best friend.
+
+---
+
+If you want, I can give you:
+
+* a **cheat sheet PDF-style summary**
+* **real examples step-by-step**
+* or **advanced Git commands (rebase, cherry-pick, etc.)**
