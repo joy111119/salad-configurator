@@ -15,10 +15,11 @@ export interface Bowl extends BaseType {
   shape: 'round' | 'square'
 }
 
-//PriceListItem interface
+//PriceListItem interface, This was added
 export interface PriceListItem {
   id: number
   item_id: number
   price: number
   type?: string
 }
+
