@@ -14,3 +14,10 @@ export interface Bowl extends BaseType {
   slot_count: number
   shape: 'round' | 'square'
 }
+
+export interface PriceListItem {
+  id: number
+  item_id: number
+  price: number
+  type?: string
+}
