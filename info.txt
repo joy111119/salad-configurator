@@ -1,0 +1,176 @@
+# 🥗 Salad Configurator – Task Handover (Sprint 1)
+
+## 📌 Project Context
+
+We are working on a **React + TypeScript + Vite + Tailwind CSS** project called **Salad Configurator**.
+
+Goal of this sprint:
+
+* Build **UI skeleton (non-functional)**
+* Define **TypeScript data models (interfaces)**
+* Follow **component-based architecture**
+
+---
+
+## ⚙️ Current Project Setup
+
+* Framework: React 19 + TypeScript
+* Build tool: Vite
+* Styling: Tailwind CSS
+* Structure already initialized and running
+
+Important folders:
+
+```
+src/
+  components/   (to be created)
+  types/
+    index.ts    ✅ (used for interfaces)
+```
+
+---
+
+## ✅ Task Completed (Task 1.1)
+
+### 🎯 Objective
+
+Create initial **TypeScript interfaces** and learn **inheritance using `extends`**
+
+---
+
+## 🧠 Implemented Interfaces
+
+### BaseType
+
+```ts
+export interface BaseType {
+  id: number
+  name: string
+  price?: number
+  image_url: string
+  barcode_url: string
+}
+```
+
+### Bowl (uses inheritance)
+
+```ts
+export interface Bowl extends BaseType {
+  base_type_id?: number
+  volume?: number
+  slot_count: number
+  shape: 'round' | 'square'
+}
+```
+
+---
+
+## 🔑 Key Concept Learned
+
+### TypeScript Inheritance
+
+```ts
+interface Bowl extends BaseType
+```
+
+Meaning:
+
+* Bowl automatically includes:
+
+  * id
+  * name
+  * price
+  * image_url
+  * barcode_url
+* Avoids duplication
+* Makes code scalable
+
+---
+
+## ⚠️ Important Clarification
+
+* These interfaces are **NOT used in UI yet**
+* This task was only about:
+
+  * defining structure ✅
+  * learning `extends` ✅
+* Usage in components will come later
+
+---
+
+## 🚧 Current App State
+
+* Default Vite template still present in `App.tsx`
+* No custom components yet
+* No UI skeleton implemented yet
+
+---
+
+## 🔜 Expected Next Tasks
+
+Likely next interfaces:
+
+* Ingredient
+* Category
+* Recipe
+* User
+
+OR UI tasks:
+
+* Header
+* BowlSelection
+* BaseSelection
+* CenterBowl
+* IngredientSection
+* SummaryBar
+
+---
+
+## 🧩 How to Continue (for next teammate)
+
+When you paste a new task, include:
+
+* The **task description**
+* Any **Figma reference (if UI)**
+* What you’re assigned to build
+
+Then ask:
+👉 “Continue from this project context”
+
+---
+
+## 💡 Example Prompt to Continue
+
+```
+We are building a Salad Configurator app using React + TypeScript.
+
+So far:
+- BaseType and Bowl interfaces are created using inheritance (extends)
+- No components built yet
+
+New task:
+[PASTE YOUR TASK HERE]
+
+Help me implement this step-by-step.
+```
+
+---
+
+## ✅ Git Commit Done
+
+```
+Add BaseType and Bowl interfaces with inheritance
+```
+
+---
+
+## 🚀 Status Summary
+
+✔ Project setup ready
+✔ First interfaces completed
+✔ Understanding of `extends` achieved
+⏳ Ready for next task
+
+---
+
+END OF HANDOVER
