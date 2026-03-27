@@ -21,3 +21,17 @@ export interface PriceListItem {
   price: number
   type?: string
 }
+
+// Category interface
+export interface Category {
+  id: number
+  name: string
+  base_type_id?: number
+}
+
+// Ingredient interface extending BaseType
+export interface Ingredient extends BaseType {
+  categoryId: number
+  diets: string[]
+  weight_grams?: number
+}
