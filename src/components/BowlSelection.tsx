@@ -1,4 +1,3 @@
-import React from "react";
 function BowlSelection() {
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
