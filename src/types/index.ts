@@ -7,7 +7,7 @@ export interface BaseType {
   barcode_url: string
 }
 
-// Bowl interface extending BaseType
+
 export interface Bowl extends BaseType {
   base_type_id?: number
   volume?: number
@@ -22,16 +22,33 @@ export interface PriceListItem {
   type?: string
 }
 
-// Category interface
+
 export interface Category {
   id: number
   name: string
   base_type_id?: number
 }
 
-// Ingredient interface extending BaseType
+
 export interface Ingredient extends BaseType {
   categoryId: number
   diets: string[]
   weight_grams?: number
+}
+
+export interface User {
+  id: number;
+  email: string;
+  name?: string;  
+  role: string;
+}
+
+export interface Recipe {
+  id: number;
+  userId: number;
+  name: string;
+  bowlId: number;
+  ingredientIds: number[]; 
+  slots?: Record<string, Ingredient | null>; 
+  is_public?: boolean; 
 }
