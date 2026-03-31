@@ -4,6 +4,7 @@ import BowlSelection from './components/BowlSelection'
 import Footer from './components/Footer'
 import CenterBowl from './components/CenterBowl'
 import IngredientSection from './components/IngredientSection'
+import SummaryBar from './components/SummaryBar'
 
 function App() {
   return (
@@ -11,9 +12,6 @@ function App() {
       <Header />
 
       
-      <div className="flex justify-end">
-        <BaseSelection />
-      </div>
 
       
       <main className="flex flex-1 items-center justify-between gap-6">
@@ -34,7 +32,7 @@ function App() {
       </main>
 
       <IngredientSection />
-
+      <SummaryBar></SummaryBar>
       <Footer />
     </div>
   )
