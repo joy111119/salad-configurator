@@ -9,6 +9,7 @@ import SummaryBar from './components/SummaryBar'
 function App() {
   return (
     <div className="p-6 min-h-screen flex flex-col">
+
       
       <Header />
 
@@ -18,9 +19,7 @@ function App() {
         
         <div className="flex flex-col lg:flex-row gap-6 justify-between items-stretch">
           <BowlSelection />
-
           <CenterBowl />
-          
           <BaseSelection />
         </div>
 
@@ -34,6 +33,7 @@ function App() {
 
       
       <Footer />
+
     </div>
   )
 }
