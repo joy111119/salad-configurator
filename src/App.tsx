@@ -1,5 +1,7 @@
 import Header from './components/Header'
 import  BaseSelection  from './components/BaseSelection'
+import BowlSelection from './components/BowlSelection'
+import Footer from './components/Footer'
 
 function App() {
   return (
@@ -9,6 +11,11 @@ function App() {
       <div className="flex justify-end">
         <BaseSelection />
       </div>
+      <main className="p-6">
+        <BowlSelection />
+      </main>
+
+      <Footer />
     </div>
   )
 }
