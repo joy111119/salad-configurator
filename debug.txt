@@ -1,22 +1,32 @@
-]633;E;{   echo "===== APP.TSX ====="\x3b   cat src/App.tsx\x3b    echo -e "\\n\\n===== MAIN.TSX ====="\x3b   cat src/main.tsx\x3b    echo -e "\\n\\n===== HEADER.TSX ====="\x3b   cat src/components/Header.tsx\x3b    echo -e "\\n\\n===== CONFIGURATOR ====="\x3b   cat src/pages/Configurator.tsx\x3b    echo -e "\\n\\n===== ABOUT ====="\x3b   cat src/pages/About.tsx\x3b    echo -e "\\n\\n===== COMMUNITY ====="\x3b   cat src/pages/Community.tsx\x3b    echo -e "\\n\\n===== PRINT ====="\x3b   cat src/pages/Print.tsx\x3b  } > debug.txt;7c223cce-e50a-45dc-9b05-1d139e79031c]633;C===== APP.TSX =====
-import { Routes, Route } from 'react-router-dom'
-import Configurator from './pages/Configurator'
-import About from './pages/About'
-import Community from './pages/Community'
-import Print from './pages/Print'
+]633;E;{   echo "===== APP.TSX ====="\x3b   cat src/App.tsx\x3b    echo -e "\\n\\n===== MAIN.TSX ====="\x3b   cat src/main.tsx\x3b    echo -e "\\n\\n===== CONFIGURATOR.TSX ====="\x3b   cat src/pages/Configurator.tsx\x3b    echo -e "\\n\\n===== HOME.TSX ====="\x3b   cat src/pages/Home.tsx\x3b    echo -e "\\n\\n===== BOWL SELECTION ====="\x3b   cat src/components/BowlSelection.tsx\x3b    echo -e "\\n\\n===== INGREDIENT SECTION ====="\x3b   cat src/components/IngredientSection.tsx\x3b    echo -e "\\n\\n===== API SERVICE ====="\x3b   cat src/services/api.ts\x3b    echo -e "\\n\\n===== TYPES ====="\x3b   cat src/types/salad.ts\x3b  } > debug.txt;7c223cce-e50a-45dc-9b05-1d139e79031c]633;C===== APP.TSX =====
+import { Routes, Route } from "react-router-dom";
+import Configurator from "./pages/Configurator";
+import About from "./pages/About";
+import Community from "./pages/Community";
+import Print from "./pages/Print";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Configurator />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/community" element={<Community />} />
-      <Route path="/print" element={<Print />} />
-    </Routes>
-  )
+    <div className="min-h-screen flex flex-col">
+      <Header />
+
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Configurator />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/print" element={<Print />} />
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
+  );
 }
 
-export default App
+export default App;
 
 
 ===== MAIN.TSX =====
@@ -34,54 +44,53 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 )
 
-===== HEADER.TSX =====
-import { Link } from 'react-router-dom'
-
-function Header() {
-  return (
-    <header className="bg-zinc-800 text-white w-full flex justify-between items-center px-8 py-4">
-      
-      {/* Logo */}
-      <Link to="/" className="w-20 h-20 rounded-full border-4 border-[#A2D135] flex items-center justify-center flex-col bg-zinc-800 shadow-lg text-center">
-        <span className="text-[10px]">Fresh Food Factory</span>
-        <span className="text-sm font-bold">FRESSE</span>
-      </Link>
-
-      {/* Title */}
-      <h1 className="text-3xl font-black tracking-widest">
-        BOWL-LASKURI
-      </h1>
-
-      {/* Menu */}
-      <nav className="bg-[#A2D135] text-black rounded-2xl px-6 py-3 flex flex-col gap-2 shadow-md">
-        <Link to="/" className="hover:underline">Home</Link>
-        <Link to="/about" className="hover:underline">About</Link>
-        <Link to="/community" className="hover:underline">Community</Link>
-        <Link to="/print" className="hover:underline">Print</Link>
-      </nav>
-
-    </header>
-  )
-}
-
-export default Header
-
-
-===== CONFIGURATOR =====
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+===== CONFIGURATOR.TSX =====
+import { useState } from 'react'
 import BaseSelection from '../components/BaseSelection'
 import BowlSelection from '../components/BowlSelection'
 import CenterBowl from '../components/CenterBowl'
 import IngredientSection from '../components/IngredientSection'
 import SummaryBar from '../components/SummaryBar'
 
+import { Bowl, Category, Ingredient } from '../types/salad'
+
 function Configurator() {
+  const [bowls, setBowls] = useState<Bowl[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [ingredients, setIngredients] = useState<Ingredient[]>([])
+
+  return (
+    <div className="p-6 flex flex-col gap-6">
+      <div className="flex flex-col lg:flex-row gap-6 justify-between items-stretch">
+        <BowlSelection />
+        <CenterBowl />
+        <BaseSelection />
+      </div>
+
+      <IngredientSection />
+      <SummaryBar />
+    </div>
+  )
+}
+
+export default Configurator
+
+
+===== HOME.TSX =====
+import Header from '../components/Header'
+import BaseSelection from '../components/BaseSelection'
+import BowlSelection from '../components/BowlSelection'
+import Footer from '../components/Footer'
+import CenterBowl from '../components/CenterBowl'
+import IngredientSection from '../components/IngredientSection'
+import SummaryBar from '../components/SummaryBar'
+
+function Home() {
   return (
     <div className="p-6 min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-1 flex flex-col gap-6 mt-6">
+      <main className="flex-1 flex flex-col gap-6">
         <div className="flex flex-col lg:flex-row gap-6 justify-between items-stretch">
           <BowlSelection />
           <CenterBowl />
@@ -97,70 +106,134 @@ function Configurator() {
   )
 }
 
-export default Configurator
+export default Home
 
+===== BOWL SELECTION =====
+import { Bowl } from "../types/salad";
 
-===== ABOUT =====
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+type Props = {
+  bowls?: Bowl[];
+};
 
-function About() {
+export default function BowlSelection({ bowls = [] }: Props) {
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-900 text-white">
-      <Header />
+    <div className="p-4 border rounded w-full lg:w-1/3">
+      <h2 className="text-xl font-bold mb-4">Select Bowl</h2>
 
-      <main className="flex-1 p-10 mt-6">
-        <h1 className="text-3xl font-bold mb-4">About</h1>
-        <p>This is the Salad Configurator app.</p>
-      </main>
-
-      <Footer />
+      <div className="flex flex-col gap-2">
+        {bowls.map((bowl) => (
+          <div
+            key={bowl.id}
+            className="p-3 bg-white text-black rounded shadow"
+          >
+            {bowl.name}
+          </div>
+        ))}
+      </div>
     </div>
-  )
+  );
 }
 
-export default About
 
+===== INGREDIENT SECTION =====
+import { Ingredient, Category } from "../types/salad";
 
-===== COMMUNITY =====
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+type Props = {
+  ingredients?: Ingredient[];
+  categories?: Category[];
+};
 
-function Community() {
+export default function IngredientSection({
+  ingredients = [],
+  categories = [],
+}: Props) {
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-900 text-white">
-      <Header />
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">Ingredients</h2>
 
-      <main className="flex-1 p-10 mt-6">
-        <h1 className="text-3xl font-bold">Community</h1>
-        <p>Coming soon...</p>
-      </main>
+      {categories.map((category) => {
+        const filtered = ingredients.filter(
+          (i) => i.categoryId === category.id
+        );
 
-      <Footer />
+        return (
+          <div key={category.id} className="mb-6">
+            <h3 className="text-lg font-semibold mb-2">
+              {category.name}
+            </h3>
+
+            <div className="grid grid-cols-2 gap-2">
+              {filtered.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-2 bg-white text-black rounded shadow"
+                >
+                  {item.name} (â‚¬{item.price})
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
-  )
+  );
 }
 
-export default Community
 
+===== API SERVICE =====
+const BASE_URL = "https://fresse-api.onrender.com/api";
 
-===== PRINT =====
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-
-function Print() {
-  return (
-    <div className="min-h-screen flex flex-col bg-zinc-900 text-white">
-      <Header />
-
-      <main className="flex-1 p-10 mt-6">
-        <h1 className="text-3xl font-bold">Print</h1>
-        <p>Coming soon...</p>
-      </main>
-
-      <Footer />
-    </div>
-  )
+// í´¹ Get Bowls
+export async function getBowls() {
+  try {
+    const res = await fetch(`${BASE_URL}/bowls`);
+    if (!res.ok) throw new Error("Failed to fetch bowls");
+    return await res.json();
+  } catch (error) {
+    console.error("getBowls error:", error);
+    return [];
+  }
 }
 
-export default Print
+// í´¹ Get Categories
+export async function getCategories() {
+  try {
+    const res = await fetch(`${BASE_URL}/categories`);
+    if (!res.ok) throw new Error("Failed to fetch categories");
+    return await res.json();
+  } catch (error) {
+    console.error("getCategories error:", error);
+    return [];
+  }
+}
+
+// í´¹ Get Ingredients
+export async function getIngredients() {
+  try {
+    const res = await fetch(`${BASE_URL}/ingredients`);
+    if (!res.ok) throw new Error("Failed to fetch ingredients");
+    return await res.json();
+  } catch (error) {
+    console.error("getIngredients error:", error);
+    return [];
+  }
+}
+
+
+===== TYPES =====
+export type Bowl = {
+  id: string;
+  name: string;
+};
+
+export type Category = {
+  id: string;
+  name: string;
+};
+
+export type Ingredient = {
+  id: string;
+  name: string;
+  price: number;
+  categoryId: string;
+};
