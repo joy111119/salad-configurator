@@ -1,0 +1,150 @@
+===== src/App.tsx =====
+import { Routes, Route } from 'react-router-dom'
+import Configurator from './pages/Configurator'
+import About from './pages/About'
+import Community from './pages/Community'
+import Print from './pages/Print'
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Configurator />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/community" element={<Community />} />
+      <Route path="/print" element={<Print />} />
+    </Routes>
+  )
+}
+
+export default App
+\n===== src/main.tsx =====
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import './index.css'
+import App from './App.tsx'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>,
+)\n===== src/components/Header.tsx =====
+import { Link } from 'react-router-dom'
+
+function Header() {
+  return (
+    <header className="bg-zinc-800 text-white w-full h-32 flex justify-between items-start px-8 pt-4">
+      
+      <Link to="/" className="w-24 h-24 rounded-full border-4 border-[#A2D135] flex items-center justify-center flex-col -mt-2 bg-zinc-800 shadow-lg text-center">
+        <span className="text-[10px]">Fresh Food Factory</span>
+        <span className="text-sm font-bold">FRESSE</span>
+      </Link>
+
+      <h1 className="text-3xl font-black tracking-widest mt-6">BOWL-LASKURI</h1>
+
+      <div className="bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md">
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/community">Community</Link>
+        <Link to="/print">Print</Link>
+      </div>
+
+    </header>
+  )
+}
+
+export default Header
+\n===== src/pages/Configurator.tsx =====
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+import BaseSelection from '../components/BaseSelection'
+import BowlSelection from '../components/BowlSelection'
+import CenterBowl from '../components/CenterBowl'
+import IngredientSection from '../components/IngredientSection'
+import SummaryBar from '../components/SummaryBar'
+
+function Configurator() {
+  return (
+    <div className="p-6 min-h-screen flex flex-col">
+      <Header />
+
+      <main className="flex-1 flex flex-col gap-6">
+        <div className="flex flex-col lg:flex-row gap-6 justify-between items-stretch">
+          <BowlSelection />
+          <CenterBowl />
+          <BaseSelection />
+        </div>
+
+        <IngredientSection />
+        <SummaryBar />
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
+
+export default Configurator
+\n===== src/pages/About.tsx =====
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+
+function About() {
+  return (
+    <div className="min-h-screen flex flex-col bg-zinc-900 text-white">
+      
+      <Header />
+
+      <main className="flex-1 p-10">
+        <h1 className="text-3xl font-bold mb-4">About</h1>
+        <p>This is the Salad Configurator app.</p>
+      </main>
+
+      <Footer />
+      
+    </div>
+  )
+}
+
+export default About\n===== src/pages/Community.tsx =====
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+
+function Community() {
+  return (
+    <div className="min-h-screen flex flex-col bg-zinc-900 text-white">
+      <Header />
+
+      <main className="flex-1 p-10">
+        <h1 className="text-3xl font-bold">Community</h1>
+        <p>Coming soon...</p>
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
+
+export default Community
+\n===== src/pages/Print.tsx =====
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+
+function Print() {
+  return (
+    <div className="min-h-screen flex flex-col bg-zinc-900 text-white">
+      <Header />
+
+      <main className="flex-1 p-10">
+        <h1 className="text-3xl font-bold">Print</h1>
+        <p>Coming soon...</p>
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
+
+export default Print
