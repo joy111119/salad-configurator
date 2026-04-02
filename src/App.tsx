@@ -5,6 +5,7 @@ import Community from "./pages/Community";
 import Print from "./pages/Print";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import IngredientCard from "./components/IngredientCard"
 
 function App() {
   return (
@@ -19,7 +20,6 @@ function App() {
           <Route path="/print" element={<Print />} />
         </Routes>
       </main>
-
       <Footer />
     </div>
   );
