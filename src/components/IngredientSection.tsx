@@ -1,44 +1,42 @@
-function IngredientSection() {
+import type { Ingredient, Category } from "../types/salad";
+
+type Props = {
+  ingredients?: Ingredient[];
+  categories?: Category[];
+};
+
+export default function IngredientSection({
+  ingredients = [],
+  categories = [],
+}: Props) {
   return (
-    <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full shadow-lg">
-      
-      {/* Title */}
-      <h2 className="text-xl font-semibold mb-6">
-        3. Lisää raaka-aineet
-      </h2>
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">Ingredients</h2>
 
-      
-      <div className="flex flex-wrap items-center gap-4 mb-6">
-        
-        
-        <input
-          type="text"
-          placeholder="Hae raaka-aineita..."
-          className="rounded-full px-6 py-3 text-black outline-none w-64 border-2 border-transparent focus:border-[#A2D135]"
-        />
+      {categories.map((category) => {
+        const filtered = ingredients.filter(
+          (i) => i.categoryId === category.id
+        );
 
-        
-        <div className="flex gap-3">
-          <button className="bg-[#A2D135] text-black font-bold px-6 py-2 rounded-full">
-            Kana
-          </button>
-          <button className="bg-[#A2D135] text-black font-bold px-6 py-2 rounded-full">
-            Kasvikset
-          </button>
-          <button className="bg-[#A2D135] text-black font-bold px-6 py-2 rounded-full">
-            Kastikkeet
-          </button>
-        </div>
+        return (
+          <div key={category.id} className="mb-6">
+            <h3 className="text-lg font-semibold mb-2">
+              {category.name}
+            </h3>
 
-      </div>
-
-      
-      <div className="text-zinc-400">
-        Ingredients will go here...
-      </div>
-
+            <div className="grid grid-cols-2 gap-2">
+              {filtered.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-2 bg-white text-black rounded shadow"
+                >
+                  {item.name} (€{item.price})
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
-
-export default IngredientSection
