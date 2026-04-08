@@ -45,12 +45,15 @@ function Configurator() {
       <div className="flex flex-col lg:flex-row gap-6">
         <BowlSelection bowls={bowls} />
         <CenterBowl />
-        <BaseSelection />
+        <BaseSelection ingredients={ingredients} />
       </div>
 
-      <IngredientSection ingredients={ingredients} categories={categories} />
-      <SummaryBar />
+      <IngredientSection 
+        ingredients={ingredients} 
+        categories={categories} 
+      />
 
+      <SummaryBar />
     </div>
   )
 }
