@@ -1,42 +1,43 @@
-import type { Ingredient, Category } from "../types/salad";
+import type { Category, Ingredient } from "../types/salad"
+import IngredientCard from "./IngredientCard"
 
-type Props = {
-  ingredients?: Ingredient[];
-  categories?: Category[];
-};
-
-export default function IngredientSection({
-  ingredients = [],
-  categories = [],
-}: Props) {
-  return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Ingredients</h2>
-
-      {categories.map((category) => {
-        const filtered = ingredients.filter(
-          (i) => i.categoryId === category.id
-        );
-
-        return (
-          <div key={category.id} className="mb-6">
-            <h3 className="text-lg font-semibold mb-2">
-              {category.name}
-            </h3>
-
-            <div className="grid grid-cols-2 gap-2">
-              {filtered.map((item) => (
-                <div
-                  key={item.id}
-                  className="p-2 bg-white text-black rounded shadow"
-                >
-                  {item.name} (€{item.price})
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
+interface Props {
+  categories: Category[]
+  ingredients: Ingredient[]
 }
+
+function IngredientSection({ categories, ingredients }: Props) {
+
+  // Filter out category 6 (bases)
+  const filteredCategories = categories.filter(c => c.id !== 6)
+
+  // Filter out base ingredients
+  const filteredIngredients = ingredients.filter(i => i.categoryId !== 6)
+
+  return (
+    <div className="bg-zinc-900 p-6 rounded-3xl shadow-lg">
+
+      {/* Category filter buttons */}
+      <div className="flex gap-3 mb-6 overflow-x-auto">
+        {filteredCategories.map(cat => (
+          <button
+            key={cat.id}
+            className="px-4 py-2 bg-zinc-700 rounded-full text-white"
+          >
+            {cat.name}
+          </button>
+        ))}
+      </div>
+
+      {/* Ingredient grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {filteredIngredients.map(ing => (
+          <IngredientCard key={ing.id} ingredient={ing} />
+        ))}
+      </div>
+
+    </div>
+  )
+}
+
+export default IngredientSection
