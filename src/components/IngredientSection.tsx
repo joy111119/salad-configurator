@@ -1,3 +1,4 @@
+// Task 2.12 - Verified by TM116
 import type { Ingredient, Category } from "../types/salad";
 import IngredientCard from "./IngredientCard";
 
