@@ -1,5 +1,6 @@
 // Task 2.12 - Verified by TM116
 import type { Ingredient, Category } from "../types/salad";
+import IngredientCard from "./IngredientCard";
 
 type Props = {
   ingredients?: Ingredient[];
@@ -25,14 +26,12 @@ export default function IngredientSection({
               {category.name}
             </h3>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {filtered.map((item) => (
-                <div
+                <IngredientCard
                   key={item.id}
-                  className="p-2 bg-white text-black rounded shadow"
-                >
-                  {item.name} (€{item.price})
-                </div>
+                  ingredient={item}
+                />
               ))}
             </div>
           </div>
