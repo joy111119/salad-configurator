@@ -1,3 +1,6 @@
+// Task 2.13 - Print route connected
+import { Link } from "react-router-dom";
+
 function SummaryBar() {
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full flex flex-col md:flex-row gap-8 shadow-xl">
@@ -11,18 +14,22 @@ function SummaryBar() {
         </ul>
       </div>
 
-      
       <div className="flex-1 flex flex-col justify-center items-center gap-6">
 
-    
         <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full mb-2 shadow-md text-center">
           450 g
         </div>
 
-    
         <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full shadow-md text-center">
           6,99 €
         </div>
+
+        {/* Task 2.13: Print Route */}
+        <Link to="/print">
+          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full shadow-md">
+            Print
+          </button>
+        </Link>
 
       </div>
 
@@ -30,4 +37,4 @@ function SummaryBar() {
   );
 }
 
-export default SummaryBar
+export default SummaryBar;
