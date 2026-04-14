@@ -5,7 +5,7 @@ import Community from "./pages/Community";
 import Print from "./pages/Print";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import IngredientCard from "./components/IngredientCard"
+import IngredientSection from "./components/IngredientSection";
 
 function App() {
   return (
@@ -18,11 +18,14 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/community" element={<Community />} />
           <Route path="/print" element={<Print />} />
+
+          <Route path="/ingredient" element={<IngredientSection />} />
         </Routes>
       </main>
+
       <Footer />
     </div>
   );
 }
 
-export default App
+export default App;

@@ -7,7 +7,7 @@ type Props = {
   categories?: Category[];
 };
 
-export default function IngredientSection({
+function IngredientSection({
   ingredients = [],
   categories = [],
 }: Props) {
@@ -40,3 +40,5 @@ export default function IngredientSection({
     </div>
   );
 }
+
+export default IngredientSection;
