@@ -1,4 +1,4 @@
-import type { Ingredient } from "../types/salad"
+import type { Ingredient } from "../types/index"
 
 interface Props {
   ingredients: Ingredient[]

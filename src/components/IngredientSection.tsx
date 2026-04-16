@@ -1,6 +1,6 @@
 // Task 2.12 - Verified by TM116
 import { useState } from "react";
-import type { Ingredient, Category } from "../types/salad";
+import type { Ingredient, Category } from "../types/index";
 import IngredientCard from "./IngredientCard";
 
 type Props = {
@@ -16,6 +16,7 @@ function IngredientSection({
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredIngredients = ingredients.filter((i) => {
+    if (i.categoryId === 6) return false;
     const matchesCategory = activeCategory === 'all' || i.categoryId === activeCategory;
     const matchesSearch = i.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
@@ -40,7 +41,7 @@ function IngredientSection({
         >
           All
         </button>
-        {categories.map((category) => (
+        {categories.filter(c => c.id !== 6).map((category) => (
           <button
             key={category.id}
             onClick={() => setActiveCategory(category.id)}

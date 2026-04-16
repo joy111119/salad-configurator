@@ -51,6 +51,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: "bold",
     textAlign: "center",
     fontSize: "14px",
+    color: "#000000",
   },
   diets: {
     display: "flex",
