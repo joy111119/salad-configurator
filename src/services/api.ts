@@ -1,6 +1,6 @@
 const BASE_URL = "https://fresse-api.onrender.com/api";
 
-// í´¹ Get Bowls
+// Get Bowls
 export async function getBowls() {
   try {
     const res = await fetch(`${BASE_URL}/bowls`);
@@ -12,7 +12,7 @@ export async function getBowls() {
   }
 }
 
-// í´¹ Get Categories
+// Get Categories
 export async function getCategories() {
   try {
     const res = await fetch(`${BASE_URL}/categories`);
@@ -24,7 +24,7 @@ export async function getCategories() {
   }
 }
 
-// í´¹ Get Ingredients
+// Get Ingredients
 export async function getIngredients() {
   try {
     const res = await fetch(`${BASE_URL}/ingredients`);
