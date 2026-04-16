@@ -4,8 +4,10 @@ import BowlSelection from '../components/BowlSelection'
 import CenterBowl from '../components/CenterBowl'
 import IngredientSection from '../components/IngredientSection'
 import SummaryBar from '../components/SummaryBar'
+import { useIngredientStore } from '../store/useIngredientStore'
 
-import type { Bowl, Category, Ingredient } from '../types/salad'
+
+import type { Bowl, Category, Ingredient } from '../types/index'
 import { getBowls, getCategories, getIngredients } from '../services/api'
 
 function Configurator() {
@@ -14,6 +16,8 @@ function Configurator() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
 
   const [loading, setLoading] = useState(true)
+  const baseType = useIngredientStore((s) => s.baseType)
+
 
   useEffect(() => {
     async function loadData() {
@@ -43,14 +47,14 @@ function Configurator() {
     <div className="p-6 flex flex-col gap-6 text-white">
 
       <div className="flex flex-col lg:flex-row gap-6">
-        <BowlSelection bowls={bowls} />
+        <BowlSelection bowls={bowls.filter(b => b.base_type_id === baseType)} />
         <CenterBowl />
         <BaseSelection ingredients={ingredients} />
       </div>
 
-      <IngredientSection 
-        ingredients={ingredients} 
-        categories={categories} 
+      <IngredientSection
+        ingredients={ingredients}
+        categories={categories.filter(c => c.base_type_id === baseType)}
       />
 
       <SummaryBar />
