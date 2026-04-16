@@ -1,10 +1,10 @@
 import type { Ingredient } from "../types/index"
 
 interface Props {
-  ingredients: Ingredient[]
+  ingredients?: Ingredient[]
 }
 
-function BaseSelection({ ingredients }: Props) {
+function BaseSelection({ ingredients = [] }: Props) {
 
   // Filter only base ingredients (categoryId === 6)
   const bases = ingredients.filter(i => i.categoryId === 6)
