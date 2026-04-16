@@ -3,6 +3,9 @@ import { useIngredientStore } from '../store/useIngredientStore'
 function CenterBowl() {
   const baseType = useIngredientStore((s) => s.baseType)
   const setBaseType = useIngredientStore((s) => s.setBaseType)
+  const slots = useIngredientStore((s) => s.slots)
+
+  const activeIngredients = Object.values(slots).filter((i) => i !== null)
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] mt-4 lg:mt-0">
@@ -26,8 +29,19 @@ function CenterBowl() {
         </div>
       </div>
 
-      <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 flex items-center justify-center shadow-inner relative">
-        <span className="text-gray-400">Your Bowl</span>
+      <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 flex flex-wrap items-center justify-center gap-2 p-6 shadow-inner relative overflow-hidden">
+        {activeIngredients.length === 0 ? (
+          <span className="text-gray-400">Your Bowl</span>
+        ) : (
+          activeIngredients.map((ingredient, index) => (
+            <span
+              key={index}
+              className="px-2 py-1 bg-green-200 text-green-800 text-xs rounded-full font-medium"
+            >
+              {ingredient!.name}
+            </span>
+          ))
+        )}
       </div>
 
       <div className="mt-6 text-center text-sm text-gray-600">
