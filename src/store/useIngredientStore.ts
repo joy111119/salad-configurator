@@ -24,9 +24,24 @@ export const useIngredientStore = create<IngredientStore>((set) => ({
 
   clearSelection: () => set({ slots: {}, selectedBowl: null, baseType: 1 }),
 
-  // placeholder
-  addIngredient: (_item) => {},
+  addIngredient: (item) => set((state) => {
+    // Base category (id 6) goes into the 'base' slot
+    if (item.categoryId === 6) {
+      return { slots: { ...state.slots, base: item } };
+    }
 
-  // placeholder
+    // Otherwise find the first empty slot based on selected bowl's slot_count
+    const slotCount = state.selectedBowl?.slot_count ?? 0;
+    for (let i = 1; i <= slotCount; i++) {
+      const key = `slot-${i}`;
+      if (!state.slots[key]) {
+        return { slots: { ...state.slots, [key]: item } };
+      }
+    }
+
+    // No empty slots available
+    return {};
+  }),
+
   removeIngredient: (_id) => {},
 }));
