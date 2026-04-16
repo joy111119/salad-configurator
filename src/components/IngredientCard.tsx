@@ -1,5 +1,7 @@
 import React from "react";
-import type { Ingredient } from "../types/salad";
+import type { Ingredient } from "../types/index";
+import { useIngredientStore } from '../store/useIngredientStore';
+
 
 interface Props {
   ingredient: Ingredient;
@@ -12,8 +14,10 @@ const dietLabels: Record<string, string> = {
 };
 
 const IngredientCard: React.FC<Props> = ({ ingredient }) => {
+  const addIngredient = useIngredientStore((s) => s.addIngredient)
+
   return (
-    <div style={styles.card}>
+    <div style={styles.card} onClick={() => addIngredient(ingredient)}>
       <div style={styles.name}>{ingredient.name}</div>
 
       <div style={styles.diets}>
@@ -47,6 +51,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: "bold",
     textAlign: "center",
     fontSize: "14px",
+    color: "#000000",
   },
   diets: {
     display: "flex",

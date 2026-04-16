@@ -1,16 +1,36 @@
 // Task 2.13 - Print route connected
 import { Link } from "react-router-dom";
+import { useIngredientStore } from "../store/useIngredientStore";
 
 function SummaryBar() {
+  const slots = useIngredientStore((s) => s.slots)
+  const removeIngredient = useIngredientStore((s) => s.removeIngredient)
+
+  const activeIngredients = Object.values(slots).filter((i) => i !== null)
+
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full flex flex-col md:flex-row gap-8 shadow-xl">
 
       <div className="flex-1 bg-[#3a3a3a] rounded-3xl p-6 min-h-[150px] shadow-inner">
-        <h3 className="text-lg font-semibold mb-4">Selected ingredients</h3>
+        <h3 className="text-lg font-semibold mb-4">
+          Selected ingredients ({activeIngredients.length})
+        </h3>
         <ul className="space-y-2 text-sm text-gray-300">
-          <li>Kana</li>
-          <li>Kaksviset</li>
-          <li>Kastikeet</li>
+          {activeIngredients.length === 0 ? (
+            <li className="text-gray-500">No ingredients selected</li>
+          ) : (
+            activeIngredients.map((ingredient, index) => (
+              <li key={index} className="flex items-center justify-between">
+                <span>{ingredient!.name}</span>
+                <button
+                  onClick={() => removeIngredient(String(ingredient!.id))}
+                  className="ml-4 text-red-400 hover:text-red-600 font-bold text-xs"
+                >
+                  x
+                </button>
+              </li>
+            ))
+          )}
         </ul>
       </div>
 
