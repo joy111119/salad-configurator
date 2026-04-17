@@ -16,7 +16,6 @@ function Header() {
         BOWL-LASKURI
       </h1>
 
-      {/* Hamburger Button */}
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className="flex flex-col gap-1 cursor-pointer"
@@ -26,7 +25,6 @@ function Header() {
         <span className="w-6 h-1 bg-white"></span>
       </button>
 
-      {/* Dropdown Menu */}
       {isMenuOpen && (
         <nav className="absolute top-full right-8 mt-2 bg-[#A2D135] text-black rounded-2xl px-6 py-3 flex flex-col gap-2 shadow-md">
           <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
