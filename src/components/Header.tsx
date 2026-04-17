@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import LoginModal from './LoginModal'
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 bg-zinc-800 text-white w-full flex justify-between items-center px-8 py-4 relative">
@@ -31,8 +33,16 @@ function Header() {
           <Link to="/about" onClick={() => setIsMenuOpen(false)}>About</Link>
           <Link to="/community" onClick={() => setIsMenuOpen(false)}>Saved Recipes</Link>
           <Link to="/print" onClick={() => setIsMenuOpen(false)}>Print</Link>
+          <button
+            onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }}
+            className="text-left font-medium"
+          >
+            Kirjaudu sisään
+          </button>
         </nav>
       )}
+
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
 
     </header>
   )
