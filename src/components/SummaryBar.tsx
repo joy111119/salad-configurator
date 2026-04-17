@@ -1,18 +1,16 @@
 import { Link } from "react-router-dom";
 import { useIngredientStore } from "../store/useIngredientStore";
+import { calculateTotalWeight } from "../utils/calculations";
 
 function SummaryBar() {
   const slots = useIngredientStore((s) => s.slots);
   const removeIngredient = useIngredientStore((s) => s.removeIngredient);
 
-  // Get active ingredients (already correct)
+  // Get active ingredients
   const activeIngredients = Object.values(slots).filter((i) => i !== null);
 
-  // ✅ Task 4.10: Calculate total weight using reduce
-  const totalWeight = activeIngredients.reduce(
-    (sum, ingredient) => sum + (ingredient?.weight_grams || 0),
-    0
-  );
+  // ✅ Task 4.11: moved logic into utils function
+  const totalWeight = calculateTotalWeight(activeIngredients);
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full flex flex-col md:flex-row gap-8 shadow-xl">
@@ -43,12 +41,12 @@ function SummaryBar() {
 
       <div className="flex-1 flex flex-col justify-center items-center gap-6">
 
-        {/* ✅ Dynamic weight instead of hardcoded value */}
+        {/* Dynamic weight */}
         <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full mb-2 shadow-md text-center">
           {totalWeight} g
         </div>
 
-        {/* (Still hardcoded - likely next task) */}
+        {/* Price (still hardcoded for now) */}
         <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full shadow-md text-center">
           6,99 €
         </div>
