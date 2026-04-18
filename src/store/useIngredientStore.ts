@@ -14,7 +14,15 @@ interface IngredientStore {
 }
 
 export const useIngredientStore = create<IngredientStore>((set) => ({
-  slots: {},
+  
+  slots: {
+    "slot-1": null,
+    "slot-2": null,
+    "slot-3": null,
+    "slot-4": null,
+    "slot-5": null,
+  },
+
   baseType: 1,
   selectedBowl: null,
 
@@ -22,31 +30,61 @@ export const useIngredientStore = create<IngredientStore>((set) => ({
 
   setBowl: (bowl) => set({ selectedBowl: bowl }),
 
-  clearSelection: () => set({ slots: {}, selectedBowl: null, baseType: 1 }),
+  clearSelection: () =>
+    set({
+      slots: {
+        "slot-1": null,
+        "slot-2": null,
+        "slot-3": null,
+        "slot-4": null,
+        "slot-5": null,
+      },
+      selectedBowl: null,
+      baseType: 1,
+    }),
 
-  addIngredient: (item) => set((state) => {
-    // Base category (id 6) goes into the 'base' slot
-    if (item.categoryId === 6) {
-      return { slots: { ...state.slots, base: item } };
-    }
+  addIngredient: (item) =>
+    set((state) => {
+      const newSlots = { ...state.slots };
 
-    // Otherwise find the first empty slot based on selected bowl's slot_count
-    const slotCount = state.selectedBowl?.slot_count ?? 0;
-    for (let i = 1; i <= slotCount; i++) {
-      const key = `slot-${i}`;
-      if (!state.slots[key]) {
-        return { slots: { ...state.slots, [key]: item } };
+      
+      if (item.categoryId === 6) {
+        return { slots: { ...newSlots, base: item } };
       }
-    }
 
-    // No empty slots available
-    return {};
-  }),
+      
+      const slotCount = state.selectedBowl?.slot_count ?? 5;
 
-  removeIngredient: (id) => set((state) => {
-    const newSlots = { ...state.slots };
-    const key = Object.keys(newSlots).find((k) => String(newSlots[k]?.id) === String(id));
-    if (key) newSlots[key] = null;
-    return { slots: newSlots };
-  }),
+      // Ensure slots exist
+      for (let i = 1; i <= slotCount; i++) {
+        const key = `slot-${i}`;
+        if (!(key in newSlots)) {
+          newSlots[key] = null;
+        }
+      }
+
+      
+      for (let i = 1; i <= slotCount; i++) {
+        const key = `slot-${i}`;
+        if (!newSlots[key]) {
+          newSlots[key] = item;
+          return { slots: newSlots };
+        }
+      }
+
+      
+      return {};
+    }),
+
+  removeIngredient: (id) =>
+    set((state) => {
+      const newSlots = { ...state.slots };
+      const key = Object.keys(newSlots).find(
+        (k) => String(newSlots[k]?.id) === String(id)
+      );
+
+      if (key) newSlots[key] = null;
+
+      return { slots: newSlots };
+    }),
 }));

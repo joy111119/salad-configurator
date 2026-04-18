@@ -31,7 +31,7 @@ function Header() {
         <nav className="absolute top-full right-8 mt-2 bg-[#A2D135] text-black rounded-2xl px-6 py-3 flex flex-col gap-2 shadow-md">
           <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
           <Link to="/about" onClick={() => setIsMenuOpen(false)}>About</Link>
-          <Link to="/community" onClick={() => setIsMenuOpen(false)}>Saved Recipes</Link>
+          <Link to="/community" onClick={() => setIsMenuOpen(false)}>Community</Link>
           <Link to="/print" onClick={() => setIsMenuOpen(false)}>Print</Link>
           <button
             onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }}

@@ -4,8 +4,8 @@ import BowlSelection from '../components/BowlSelection'
 import CenterBowl from '../components/CenterBowl'
 import IngredientSection from '../components/IngredientSection'
 import SummaryBar from '../components/SummaryBar'
+import Modal from '../components/Modal' 
 import { useIngredientStore } from '../store/useIngredientStore'
-
 
 import type { Bowl, Category, Ingredient } from '../types/index'
 import { getBowls, getCategories, getIngredients } from '../services/api'
@@ -16,8 +16,10 @@ function Configurator() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
 
   const [loading, setLoading] = useState(true)
-  const baseType = useIngredientStore((s) => s.baseType)
 
+  const [isModalOpen, setIsModalOpen] = useState(false) 
+
+  const baseType = useIngredientStore((s) => s.baseType)
 
   useEffect(() => {
     async function loadData() {
@@ -46,6 +48,13 @@ function Configurator() {
   return (
     <div className="p-6 flex flex-col gap-6 text-white">
 
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="bg-blue-500 px-4 py-2 rounded"
+      >
+        Open Modal
+      </button>
+
       <div className="flex flex-col lg:flex-row gap-6">
         <BowlSelection bowls={bowls.filter(b => b.base_type_id === baseType)} />
         <CenterBowl />
@@ -58,6 +67,14 @@ function Configurator() {
       />
 
       <SummaryBar />
+
+      
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <div className="text-black">
+          Hello Modal 
+        </div>
+      </Modal>
+
     </div>
   )
 }
