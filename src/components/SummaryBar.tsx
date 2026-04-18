@@ -6,15 +6,16 @@ function SummaryBar() {
   const slots = useIngredientStore((s) => s.slots);
   const removeIngredient = useIngredientStore((s) => s.removeIngredient);
 
-  // Get active ingredients
-  const activeIngredients = Object.values(slots).filter((i) => i !== null);
+  const activeIngredients = Object.values(slots).filter(
+    (i): i is NonNullable<typeof i> => i !== null
+  );
 
-  // ✅ Task 4.11: moved logic into utils function
+  
   const totalWeight = calculateTotalWeight(activeIngredients);
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full flex flex-col md:flex-row gap-8 shadow-xl">
-
+      
       <div className="flex-1 bg-[#3a3a3a] rounded-3xl p-6 min-h-[150px] shadow-inner">
         <h3 className="text-lg font-semibold mb-4">
           Selected ingredients ({activeIngredients.length})
@@ -24,8 +25,11 @@ function SummaryBar() {
           {activeIngredients.length === 0 ? (
             <li className="text-gray-500">No ingredients selected</li>
           ) : (
-            activeIngredients.map((ingredient, index) => (
-              <li key={index} className="flex items-center justify-between">
+            activeIngredients.map((ingredient) => (
+              <li
+                key={ingredient.id}
+                className="flex items-center justify-between"
+              >
                 <span>{ingredient.name}</span>
                 <button
                   onClick={() => removeIngredient(String(ingredient.id))}
@@ -39,18 +43,20 @@ function SummaryBar() {
         </ul>
       </div>
 
+      
       <div className="flex-1 flex flex-col justify-center items-center gap-6">
 
-        {/* Dynamic weight */}
+        
         <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full mb-2 shadow-md text-center">
           {totalWeight} g
         </div>
 
-        {/* Price (still hardcoded for now) */}
+       
         <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full shadow-md text-center">
           6,99 €
         </div>
 
+        
         <Link to="/print">
           <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full shadow-md">
             Print
@@ -58,7 +64,6 @@ function SummaryBar() {
         </Link>
 
       </div>
-
     </div>
   );
 }
