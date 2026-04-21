@@ -1,5 +1,18 @@
 const BASE_URL = "https://fresse-api.onrender.com/api";
 
+// Login
+export async function login(email: string, password: string) {
+  const res = await fetch(`${BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!res.ok) throw new Error("Invalid credentials");
+
+  return await res.json();
+}
+
 // Get Bowls
 export async function getBowls() {
   try {
