@@ -12,7 +12,9 @@ function LoginModal({ isOpen, onClose }: Props) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log('Login:', { email, password });
+    console.log('Login clicked');
+    setEmail('');
+    setPassword('');
   }
 
   return (

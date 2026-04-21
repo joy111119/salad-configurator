@@ -5,6 +5,7 @@ function CenterBowl() {
   const setBaseType = useIngredientStore((s) => s.setBaseType)
   const slots = useIngredientStore((s) => s.slots)
   const clearSelection = useIngredientStore((s) => s.clearSelection)
+  const selectedBowl = useIngredientStore((s) => s.selectedBowl)
 
   const activeIngredients = Object.values(slots).filter((i) => i !== null)
 
@@ -75,7 +76,7 @@ function CenterBowl() {
       
       <div className="mt-6 text-center text-sm text-gray-600">
         <p>100 g / 1,99 €</p>
-        <p>500 ml</p>
+        <p>{selectedBowl ? selectedBowl.volume : 0} ml</p>
       </div>
 
     </div>
