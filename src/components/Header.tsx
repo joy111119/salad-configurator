@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import LoginModal from './LoginModal'
+import { useAuthStore } from '../store/useAuthStore'
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const userName = useAuthStore((s) => s.userName)
+  const logout = useAuthStore((s) => s.logout)
 
   return (
     <header className="sticky top-0 z-50 bg-zinc-800 text-white w-full flex justify-between items-center px-8 py-4 relative">
@@ -33,12 +36,24 @@ function Header() {
           <Link to="/about" onClick={() => setIsMenuOpen(false)}>About</Link>
           <Link to="/community" onClick={() => setIsMenuOpen(false)}>Community</Link>
           <Link to="/print" onClick={() => setIsMenuOpen(false)}>Print</Link>
-          <button
-            onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }}
-            className="text-left font-medium"
-          >
-            Kirjaudu sisään
-          </button>
+          {userName ? (
+            <>
+              <span className="font-medium">Hello, {userName}</span>
+              <button
+                onClick={() => { logout(); setIsMenuOpen(false); }}
+                className="text-left font-medium text-red-600"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }}
+              className="text-left font-medium"
+            >
+              Kirjaudu sisään
+            </button>
+          )}
         </nav>
       )}
 
