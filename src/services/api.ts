@@ -48,3 +48,21 @@ export async function getIngredients() {
     return [];
   }
 }
+
+// ⭐ NEW FOR TASK 5.4 — Fetch Protected Prices
+export async function getPrices(token: string) {
+  try {
+    const res = await fetch(`${BASE_URL}/prices`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch prices");
+
+    return await res.json();
+  } catch (error) {
+    console.error("getPrices error:", error);
+    return [];
+  }
+}
