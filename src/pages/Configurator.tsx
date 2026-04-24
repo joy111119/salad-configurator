@@ -26,8 +26,8 @@ function Configurator() {
     async function loadData() {
       try {
         const [b, c, i, bi] = await Promise.all([
-          getBowls(),
-          getCategories(),
+          getBowls(baseType),
+          getCategories(baseType),
           getIngredients(),
           getBaseIngredients()
         ])
@@ -44,7 +44,7 @@ function Configurator() {
     }
 
     loadData()
-  }, [])
+  }, [baseType])
 
   if (loading) return <div className="p-6">Loading...</div>
 
@@ -59,14 +59,14 @@ function Configurator() {
       </button>
 
       <div className="flex flex-col lg:flex-row gap-6">
-        <BowlSelection bowls={bowls.filter(b => b.base_type_id === baseType)} />
+        <BowlSelection bowls={bowls} />
         <CenterBowl />
         <BaseSelection bases={bases} />
       </div>
 
       <IngredientSection
         ingredients={ingredients}
-        categories={categories.filter(c => c.base_type_id === baseType)}
+        categories={categories}
       />
 
       <SummaryBar />

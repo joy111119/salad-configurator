@@ -14,9 +14,9 @@ export async function login(email: string, password: string) {
 }
 
 // Get Bowls
-export async function getBowls() {
+export async function getBowls(typeId: number) {
   try {
-    const res = await fetch(`${BASE_URL}/bowls`);
+    const res = await fetch(`${BASE_URL}/bowls?type_id=${typeId}`);
     if (!res.ok) throw new Error("Failed to fetch bowls");
     return await res.json();
   } catch (error) {
@@ -26,9 +26,9 @@ export async function getBowls() {
 }
 
 // Get Categories
-export async function getCategories() {
+export async function getCategories(typeId: number) {
   try {
-    const res = await fetch(`${BASE_URL}/categories`);
+    const res = await fetch(`${BASE_URL}/categories?type_id=${typeId}`);
     if (!res.ok) throw new Error("Failed to fetch categories");
     return await res.json();
   } catch (error) {
