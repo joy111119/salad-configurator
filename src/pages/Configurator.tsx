@@ -8,12 +8,13 @@ import Modal from '../components/Modal'
 import { useIngredientStore } from '../store/useIngredientStore'
 
 import type { Bowl, Category, Ingredient } from '../types/index'
-import { getBowls, getCategories, getIngredients } from '../services/api'
+import { getBowls, getCategories, getIngredients, getBaseIngredients } from '../services/api'
 
 function Configurator() {
   const [bowls, setBowls] = useState<Bowl[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
+  const [bases, setBases] = useState<Ingredient[]>([])
 
   const [loading, setLoading] = useState(true)
 
@@ -24,15 +25,17 @@ function Configurator() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [b, c, i] = await Promise.all([
+        const [b, c, i, bi] = await Promise.all([
           getBowls(),
           getCategories(),
-          getIngredients()
+          getIngredients(),
+          getBaseIngredients()
         ])
 
         setBowls(b)
         setCategories(c)
         setIngredients(i)
+        setBases(bi)
       } catch (error) {
         console.error(error)
       } finally {
@@ -58,7 +61,7 @@ function Configurator() {
       <div className="flex flex-col lg:flex-row gap-6">
         <BowlSelection bowls={bowls.filter(b => b.base_type_id === baseType)} />
         <CenterBowl />
-        <BaseSelection ingredients={ingredients} />
+        <BaseSelection bases={bases} />
       </div>
 
       <IngredientSection
