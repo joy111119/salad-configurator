@@ -41,27 +41,22 @@ function CenterBowl() {
   const setBaseType = useIngredientStore((s) => s.setBaseType)
   const slots = useIngredientStore((s) => s.slots)
   const clearSelection = useIngredientStore((s) => s.clearSelection)
+  const clearSlot = useIngredientStore((s) => s.clearSlot)
   const selectedBowl = useIngredientStore((s) => s.selectedBowl)
 
   const baseIngredient = slots['base'] ?? null
-  const activeIngredients = Object.entries(slots)
-    .filter(([key, val]) => key !== 'base' && val !== null)
-    .map(([, val]) => val)
+  const activeSlots = Object.entries(slots).filter(
+    ([key, val]) => key !== 'base' && val !== null
+  ) as [string, NonNullable<typeof slots[string]>][]
 
   const handleClear = () => {
-    const confirmClear = window.confirm(
-      "Are you sure you want to empty the bowl?"
-    )
-
-    if (confirmClear) {
-      clearSelection()
-    }
+    const confirmClear = window.confirm('Are you sure you want to empty the bowl?')
+    if (confirmClear) clearSelection()
   }
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] mt-4 lg:mt-0">
 
-      
       <div className="flex gap-3 mb-6 items-center">
         <button
           onClick={() => setBaseType(1)}
@@ -81,23 +76,13 @@ function CenterBowl() {
         </div>
       </div>
 
-      
       <div className="flex gap-4 mb-4 text-xl">
-        <button onClick={() => alert("Feature coming soon!")}>
-          ↩️
-        </button>
-
-        <button onClick={handleClear}>
-          🗑️
-        </button>
-
-        <button onClick={() => alert("Feature coming soon!")}>
-          💾
-        </button>
+        <button onClick={() => alert('Feature coming soon!')}>↩️</button>
+        <button onClick={handleClear}>🗑️</button>
+        <button onClick={() => alert('Feature coming soon!')}>💾</button>
       </div>
 
-      
-      <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 flex flex-wrap items-center justify-center gap-2 p-6 shadow-inner relative overflow-hidden">
+      <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 shadow-inner relative overflow-hidden flex items-center justify-center">
 
         {/* Base image layer */}
         {baseIngredient?.image_url && (
@@ -114,31 +99,47 @@ function CenterBowl() {
         )}
 
         {/* Ingredients layer */}
-        <div className="relative z-30 flex flex-wrap items-center justify-center gap-2">
-          {activeIngredients.length === 0 ? (
-            <span className="text-gray-400">Your Bowl</span>
-          ) : (
-            activeIngredients.map((ingredient, index) => (
-              <span
-                key={index}
-                className="px-2 py-1 bg-green-200 text-green-800 text-xs rounded-full font-medium"
-              >
-                {ingredient!.name}
-              </span>
-            ))
-          )}
-        </div>
+        {activeSlots.length === 0 ? (
+          <span className="text-gray-400 z-30 relative">Your Bowl</span>
+        ) : (
+          <div className="relative z-30 flex flex-wrap items-center justify-center gap-2 p-4 w-full h-full">
+            {activeSlots.map(([slotKey, ingredient]) => (
+              <div key={slotKey} className="relative flex flex-col items-center group">
+                {ingredient.image_url ? (
+                  <img
+                    src={ingredient.image_url}
+                    alt={ingredient.name}
+                    className="w-14 h-14 object-cover rounded-full border-2 border-white shadow"
+                  />
+                ) : (
+                  <span className="px-2 py-1 bg-green-200 text-green-800 text-xs rounded-full font-medium">
+                    {ingredient.name}
+                  </span>
+                )}
+                <button
+                  onClick={() => clearSlot(slotKey)}
+                  className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center leading-none opacity-0 group-hover:opacity-100 transition-opacity"
+                  title={`Remove ${ingredient.name}`}
+                >
+                  ×
+                </button>
+                <span className="text-[10px] text-white mt-1 text-center max-w-[56px] truncate drop-shadow">
+                  {ingredient.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
 
       </div>
 
-      
       <div className="mt-6 text-center text-sm text-gray-600">
         <p>100 g / 1,99 €</p>
         <p>{selectedBowl ? selectedBowl.volume : 0} ml</p>
       </div>
 
     </div>
-  );
+  )
 }
 
-export default CenterBowl;
+export default CenterBowl
