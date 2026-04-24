@@ -11,6 +11,7 @@ interface IngredientStore {
   clearSelection: () => void;
   addIngredient: (item: Ingredient) => void;
   removeIngredient: (id: string) => void;
+  clearSlot: (slotId: string) => void;
 }
 
 export const useIngredientStore = create<IngredientStore>((set) => ({
@@ -87,4 +88,9 @@ export const useIngredientStore = create<IngredientStore>((set) => ({
 
       return { slots: newSlots };
     }),
+
+  clearSlot: (slotId) =>
+    set((state) => ({
+      slots: { ...state.slots, [slotId]: null },
+    })),
 }));
