@@ -37,6 +37,18 @@ export async function getCategories() {
   }
 }
 
+// Get Base Ingredients
+export async function getBaseIngredients() {
+  try {
+    const res = await fetch(`${BASE_URL}/baseingredients`);
+    if (!res.ok) throw new Error("Failed to fetch base ingredients");
+    return await res.json();
+  } catch (error) {
+    console.error("getBaseIngredients error:", error);
+    return [];
+  }
+}
+
 // Get Ingredients
 export async function getIngredients() {
   try {

@@ -1,13 +1,10 @@
 import type { Ingredient } from "../types/index"
 
 interface Props {
-  ingredients?: Ingredient[]
+  bases?: Ingredient[]
 }
 
-function BaseSelection({ ingredients = [] }: Props) {
-
-  // Filter only base ingredients (categoryId === 6)
-  const bases = ingredients.filter(i => i.categoryId === 6)
+function BaseSelection({ bases = [] }: Props) {
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
