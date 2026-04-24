@@ -49,7 +49,7 @@ export async function getIngredients() {
   }
 }
 
-// ⭐ NEW FOR TASK 5.4 — Fetch Protected Prices
+// ⭐ Protected Prices (Task 5.4)
 export async function getPrices(token: string) {
   try {
     const res = await fetch(`${BASE_URL}/prices`, {
@@ -64,5 +64,26 @@ export async function getPrices(token: string) {
   } catch (error) {
     console.error("getPrices error:", error);
     return [];
+  }
+}
+
+// ⭐ NEW — Task 5.8: Save Recipe
+export async function saveRecipe(token: string, recipeData: any) {
+  try {
+    const res = await fetch(`${BASE_URL}/recipes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(recipeData),
+    });
+
+    if (!res.ok) throw new Error("Failed to save recipe");
+
+    return await res.json();
+  } catch (error) {
+    console.error("saveRecipe error:", error);
+    throw error;
   }
 }

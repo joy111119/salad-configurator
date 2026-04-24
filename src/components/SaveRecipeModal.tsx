@@ -1,24 +1,50 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
+import { useIngredientStore } from "../store/useIngredientStore";
+import { saveRecipe } from "../services/api";
 
 interface SaveRecipeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (name: string, isPublic: boolean) => void;
 }
 
 const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
   isOpen,
   onClose,
-  onSave,
 }) => {
   const [name, setName] = useState("");
   const [isPublic, setIsPublic] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const slots = useIngredientStore((s) => s.slots);
+  const bowlId = useIngredientStore((s) => s.bowlId);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(name, isPublic);
-    onClose();
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in to save recipes");
+      return;
+    }
+
+    const ingredientIds = Object.values(slots)
+      .filter((i): i is NonNullable<typeof i> => i !== null)
+      .map((i) => i.id);
+
+    const recipeData = {
+      name,
+      bowlId,
+      ingredientIds,
+      is_public: isPublic,
+    };
+
+    try {
+      await saveRecipe(token, recipeData);
+      onClose();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save recipe");
+    }
   };
 
   return (
@@ -27,8 +53,6 @@ const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
         <h2 className="text-xl font-bold mb-4">Save Recipe</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
-          {/* Recipe Name */}
           <div>
             <label className="block text-sm font-medium mb-1">
               Recipe Name
@@ -43,7 +67,6 @@ const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
             />
           </div>
 
-          {/* Public Checkbox */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -54,7 +77,6 @@ const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
             <label className="text-sm">Make Public</label>
           </div>
 
-          {/* Buttons */}
           <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"
