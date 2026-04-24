@@ -1,5 +1,41 @@
 import { useIngredientStore } from '../store/useIngredientStore'
 
+function BowlDivider({ slotCount }: { slotCount: number }) {
+  const lines: { x1: number; y1: number; x2: number; y2: number }[] = []
+  const cx = 50
+  const cy = 50
+  const r = 50
+  const lineCount = slotCount / 2
+
+  for (let i = 0; i < lineCount; i++) {
+    const angle = (i * Math.PI) / lineCount
+    lines.push({
+      x1: cx + r * Math.cos(angle),
+      y1: cy + r * Math.sin(angle),
+      x2: cx - r * Math.cos(angle),
+      y2: cy - r * Math.sin(angle),
+    })
+  }
+
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      className="absolute inset-0 w-full h-full z-20 pointer-events-none"
+    >
+      {lines.map((l, i) => (
+        <line
+          key={i}
+          x1={l.x1} y1={l.y1}
+          x2={l.x2} y2={l.y2}
+          stroke="white"
+          strokeWidth="1.5"
+          strokeOpacity="0.6"
+        />
+      ))}
+    </svg>
+  )
+}
+
 function CenterBowl() {
   const baseType = useIngredientStore((s) => s.baseType)
   const setBaseType = useIngredientStore((s) => s.setBaseType)
@@ -7,7 +43,10 @@ function CenterBowl() {
   const clearSelection = useIngredientStore((s) => s.clearSelection)
   const selectedBowl = useIngredientStore((s) => s.selectedBowl)
 
-  const activeIngredients = Object.values(slots).filter((i) => i !== null)
+  const baseIngredient = slots['base'] ?? null
+  const activeIngredients = Object.entries(slots)
+    .filter(([key, val]) => key !== 'base' && val !== null)
+    .map(([, val]) => val)
 
   const handleClear = () => {
     const confirmClear = window.confirm(
@@ -59,18 +98,37 @@ function CenterBowl() {
 
       
       <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 flex flex-wrap items-center justify-center gap-2 p-6 shadow-inner relative overflow-hidden">
-        {activeIngredients.length === 0 ? (
-          <span className="text-gray-400">Your Bowl</span>
-        ) : (
-          activeIngredients.map((ingredient, index) => (
-            <span
-              key={index}
-              className="px-2 py-1 bg-green-200 text-green-800 text-xs rounded-full font-medium"
-            >
-              {ingredient!.name}
-            </span>
-          ))
+
+        {/* Base image layer */}
+        {baseIngredient?.image_url && (
+          <img
+            src={baseIngredient.image_url}
+            alt={baseIngredient.name}
+            className="absolute inset-0 w-full h-full object-cover z-10 opacity-60"
+          />
         )}
+
+        {/* Divider layer */}
+        {selectedBowl?.slot_count && (
+          <BowlDivider slotCount={selectedBowl.slot_count} />
+        )}
+
+        {/* Ingredients layer */}
+        <div className="relative z-30 flex flex-wrap items-center justify-center gap-2">
+          {activeIngredients.length === 0 ? (
+            <span className="text-gray-400">Your Bowl</span>
+          ) : (
+            activeIngredients.map((ingredient, index) => (
+              <span
+                key={index}
+                className="px-2 py-1 bg-green-200 text-green-800 text-xs rounded-full font-medium"
+              >
+                {ingredient!.name}
+              </span>
+            ))
+          )}
+        </div>
+
       </div>
 
       
