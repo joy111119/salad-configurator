@@ -17,6 +17,7 @@ const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
 
   const slots = useIngredientStore((s) => s.slots);
   const bowlId = useIngredientStore((s) => s.bowlId);
+  const clearSelection = useIngredientStore((s) => s.clearSelection);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +41,13 @@ const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
 
     try {
       await saveRecipe(token, recipeData);
+
+      // ⭐ Task 5.9: Success feedback
+      alert("Recipe saved!");
+
+      // ⭐ Task 5.9: Reset bowl
+      clearSelection();
+
       onClose();
     } catch (err) {
       console.error(err);
