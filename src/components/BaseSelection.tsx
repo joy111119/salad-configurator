@@ -1,13 +1,16 @@
-import type { Ingredient } from "../types/index"
+import type { Ingredient } from "../types/index";
+import { useIngredientStore } from "../store/useIngredientStore";
 
 interface Props {
-  ingredients?: Ingredient[]
+  ingredients?: Ingredient[];
 }
 
 function BaseSelection({ ingredients = [] }: Props) {
-
   // Filter only base ingredients (categoryId === 6)
-  const bases = ingredients.filter(i => i.categoryId === 6)
+  const bases = ingredients.filter((i) => i.categoryId === 6);
+
+  const selectedBase = useIngredientStore((s) => s.selectedBase);
+  const setBase = useIngredientStore((s) => s.setBase);
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
@@ -21,18 +24,26 @@ function BaseSelection({ ingredients = [] }: Props) {
       </h2>
 
       <div className="w-full space-y-3">
-        {bases.map(base => (
-          <div 
+        {bases.map((base) => (
+          <div
             key={base.id}
-            className="border-b border-gray-600 pb-2 flex justify-end gap-4 items-center"
+            onClick={() => setBase(base)}
+            className={`
+              border-b pb-2 flex justify-end gap-4 items-center cursor-pointer
+              ${
+                selectedBase?.id === base.id
+                  ? "border-b-green-400 text-green-400"
+                  : "border-b-gray-600 text-gray-300"
+              }
+            `}
           >
-            <span className="text-gray-300">{base.name}</span>
+            <span>{base.name}</span>
           </div>
         ))}
       </div>
 
     </div>
-  )
+  );
 }
 
-export default BaseSelection
+export default BaseSelection;
