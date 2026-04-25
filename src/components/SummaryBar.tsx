@@ -5,20 +5,22 @@ import { calculateTotalWeight } from "../utils/calculations";
 
 function SummaryBar() {
   const slots = useIngredientStore((s) => s.slots);
-  const removeIngredient = useIngredientStore((s) => s.removeIngredient);
+  const clearSlot = useIngredientStore((s) => s.clearSlot);
 
   const prices = usePriceStore((s) => s.prices);
 
-  // Convert slots → array of active ingredients
-  const activeIngredients = Object.values(slots).filter(
-    (i): i is NonNullable<typeof i> => i !== null
+  // Convert slots → array of { slotKey, ingredient }
+  const activeItems = Object.entries(slots)
+    .filter(([_, item]) => item !== null)
+    .map(([slotKey, item]) => ({ slotKey, ingredient: item! }));
+
+  // Total weight
+  const totalWeight = calculateTotalWeight(
+    activeItems.map((i) => i.ingredient)
   );
 
-  // Total weight (already implemented)
-  const totalWeight = calculateTotalWeight(activeIngredients);
-
-  // ⭐ Task 5.6: Total price calculation using reduce()
-  const totalPrice = activeIngredients.reduce((sum, ingredient) => {
+  // Total price
+  const totalPrice = activeItems.reduce((sum, { ingredient }) => {
     const priceItem = prices.find((p) => p.item_id === ingredient.id);
     return sum + (priceItem ? priceItem.price : 0);
   }, 0);
@@ -29,21 +31,22 @@ function SummaryBar() {
       {/* Selected Ingredients */}
       <div className="flex-1 bg-[#3a3a3a] rounded-3xl p-6 min-h-[150px] shadow-inner">
         <h3 className="text-lg font-semibold mb-4">
-          Selected ingredients ({activeIngredients.length})
+          Selected ingredients ({activeItems.length})
         </h3>
 
         <ul className="space-y-2 text-sm text-gray-300">
-          {activeIngredients.length === 0 ? (
+          {activeItems.length === 0 ? (
             <li className="text-gray-500">No ingredients selected</li>
           ) : (
-            activeIngredients.map((ingredient) => (
+            activeItems.map(({ slotKey, ingredient }) => (
               <li
-                key={ingredient.id}
+                key={slotKey}
                 className="flex items-center justify-between"
               >
                 <span>{ingredient.name}</span>
+
                 <button
-                  onClick={() => removeIngredient(String(ingredient.id))}
+                  onClick={() => clearSlot(slotKey)}
                   className="ml-4 text-red-400 hover:text-red-600 font-bold text-xs"
                 >
                   x
@@ -62,7 +65,7 @@ function SummaryBar() {
           {totalWeight} g
         </div>
 
-        {/* ⭐ Total Price */}
+        {/* Total Price */}
         <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full shadow-md text-center">
           {totalPrice.toFixed(2)} €
         </div>
