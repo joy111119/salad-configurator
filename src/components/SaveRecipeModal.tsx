@@ -16,15 +16,21 @@ const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
   const [isPublic, setIsPublic] = useState(false);
 
   const slots = useIngredientStore((s) => s.slots);
-  const bowlId = useIngredientStore((s) => s.bowlId);
+  const selectedBowl = useIngredientStore((s) => s.selectedBowl);
   const clearSelection = useIngredientStore((s) => s.clearSelection);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
+
     if (!token) {
       alert("You must be logged in to save recipes");
+      return;
+    }
+
+    if (!selectedBowl) {
+      alert("Please select a bowl");
       return;
     }
 
@@ -34,7 +40,7 @@ const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
 
     const recipeData = {
       name,
-      bowlId,
+      bowlId: selectedBowl.id, 
       ingredientIds,
       is_public: isPublic,
     };
@@ -42,16 +48,19 @@ const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
     try {
       await saveRecipe(token, recipeData);
 
-      // ⭐ Task 5.9: Success feedback
       alert("Recipe saved!");
 
-      // ⭐ Task 5.9: Reset bowl
       clearSelection();
+      setName("");
+      setIsPublic(false);
 
       onClose();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to save recipe");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("Failed to save recipe");
+      }
     }
   };
 

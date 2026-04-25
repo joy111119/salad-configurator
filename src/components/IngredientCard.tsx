@@ -1,7 +1,7 @@
 import React from "react";
 import type { Ingredient } from "../types/index";
 import { useIngredientStore } from "../store/useIngredientStore";
-import { usePriceStore } from "../store/usePriceStore";
+import { usePriceStore, type Price } from "../store/usePriceStore"; // ✅ import Price type
 
 interface Props {
   ingredient: Ingredient;
@@ -16,13 +16,12 @@ const dietLabels: Record<string, string> = {
 const IngredientCard: React.FC<Props> = ({ ingredient }) => {
   const addIngredient = useIngredientStore((s) => s.addIngredient);
 
-  // ⭐ Read prices from global store
-  const prices = usePriceStore((state) => state.prices);
+  // ✅ Explicitly type state (fixes "unknown")
+  const prices = usePriceStore((state: { prices: Price[] }) => state.prices);
 
-  // ⭐ Find matching price for this ingredient
-  const priceItem = prices.find((p) => p.item_id === ingredient.id);
+  // ✅ Explicitly type p (fixes "any")
+  const priceItem = prices.find((p: Price) => p.item_id === ingredient.id);
 
-  // ⭐ Detect login
   const token = localStorage.getItem("token");
   const isLoggedIn = Boolean(token);
 
@@ -30,7 +29,6 @@ const IngredientCard: React.FC<Props> = ({ ingredient }) => {
     <div style={styles.card} onClick={() => addIngredient(ingredient)}>
       <div style={styles.name}>{ingredient.name}</div>
 
-      {/* ⭐ Dynamic price display */}
       <div style={{ fontSize: "12px", marginTop: "4px", color: "#333" }}>
         {isLoggedIn ? (
           priceItem ? (
