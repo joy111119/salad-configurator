@@ -1,6 +1,11 @@
-export function calculateTotalWeight(ingredients) {
+type Ingredient = {
+  weight_grams?: number;
+};
+
+export function calculateTotalWeight(ingredients: Ingredient[]): number {
   return ingredients.reduce(
-    (sum, ingredient) => sum + (ingredient?.weight_grams || 0),
+    (sum: number, ingredient: Ingredient) =>
+      sum + (ingredient?.weight_grams || 0),
     0
   );
 }
