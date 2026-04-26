@@ -23,12 +23,14 @@ function Configurator() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [bases, setBases] = useState<Ingredient[]>([]);
-  const [slots, setSlots] = useState<Record<string, Ingredient | null>>({});
 
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // ✅ USE STORE INSTEAD OF LOCAL STATE
   const baseType = useIngredientStore((s) => s.baseType);
+  const slots = useIngredientStore((s) => s.slots);
+  const setSlots = useIngredientStore((s) => s.setSlots);
 
   useEffect(() => {
     async function loadData() {
@@ -64,6 +66,7 @@ function Configurator() {
 
     if (!ingredient) return;
 
+    // ✅ UPDATE GLOBAL STORE
     setSlots((prev) => ({
       ...prev,
       [over.id]: ingredient,
@@ -78,6 +81,8 @@ function Configurator() {
 
         <div className="flex flex-col lg:flex-row gap-6">
           <BowlSelection bowls={bowls} />
+
+          {/* ✅ pass store slots */}
           <CenterBowl slots={slots} />
 
           {baseType === 2 ? (
@@ -99,6 +104,7 @@ function Configurator() {
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <div className="text-black">Hello Modal</div>
         </Modal>
+
       </div>
     </DndContext>
   );
