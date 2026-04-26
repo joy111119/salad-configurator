@@ -6,6 +6,10 @@ interface IngredientStore {
   baseType: number;
   selectedBowl: Bowl | null;
 
+  // ✅ ADD THESE
+  selectedBase: Ingredient | null;
+  setBase: (base: Ingredient) => void;
+
   setBaseType: (id: number) => void;
   setBowl: (bowl: Bowl) => void;
   clearSelection: () => void;
@@ -27,6 +31,10 @@ export const useIngredientStore = create<IngredientStore>((set) => ({
   baseType: 1,
   selectedBowl: null,
 
+  // ✅ ADD THESE
+  selectedBase: null,
+  setBase: (base) => set({ selectedBase: base }),
+
   setBaseType: (id) => set({ baseType: id }),
 
   setBowl: (bowl) => set({ selectedBowl: bowl }),
@@ -42,21 +50,20 @@ export const useIngredientStore = create<IngredientStore>((set) => ({
       },
       selectedBowl: null,
       baseType: 1,
+      selectedBase: null, // ✅ reset
     }),
 
   addIngredient: (item) =>
     set((state) => {
       const newSlots = { ...state.slots };
 
-      
+      // Optional: sync base with selectedBase
       if (item.categoryId === 6) {
-        return { slots: { ...newSlots, base: item } };
+        return { selectedBase: item };
       }
 
-      
       const slotCount = state.selectedBowl?.slot_count ?? 5;
 
-      // Ensure slots exist
       for (let i = 1; i <= slotCount; i++) {
         const key = `slot-${i}`;
         if (!(key in newSlots)) {
@@ -64,7 +71,6 @@ export const useIngredientStore = create<IngredientStore>((set) => ({
         }
       }
 
-      
       for (let i = 1; i <= slotCount; i++) {
         const key = `slot-${i}`;
         if (!newSlots[key]) {
@@ -73,7 +79,6 @@ export const useIngredientStore = create<IngredientStore>((set) => ({
         }
       }
 
-      
       return {};
     }),
 
