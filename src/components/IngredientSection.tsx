@@ -12,13 +12,16 @@ function IngredientSection({
   ingredients = [],
   categories = [],
 }: Props) {
-  const [activeCategory, setActiveCategory] = useState<string | number>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState<string | number>("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filteredIngredients = ingredients.filter((i) => {
     if (i.categoryId === 6) return false;
-    const matchesCategory = activeCategory === 'all' || i.categoryId === activeCategory;
-    const matchesSearch = i.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      activeCategory === "all" || i.categoryId === activeCategory;
+    const matchesSearch = i.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -36,29 +39,50 @@ function IngredientSection({
 
       <div className="flex gap-2 flex-wrap mb-4">
         <button
-          onClick={() => setActiveCategory('all')}
-          className={`px-3 py-1 rounded-full text-sm font-medium ${activeCategory === 'all' ? 'bg-green-400 text-white' : 'bg-gray-200 text-black'}`}
+          onClick={() => setActiveCategory("all")}
+          className={`px-3 py-1 rounded-full text-sm font-medium ${
+            activeCategory === "all"
+              ? "bg-green-400 text-white"
+              : "bg-gray-200 text-black"
+          }`}
         >
           All
         </button>
-        {categories.filter(c => c.id !== 6).map((category) => (
-          <button
-            key={category.id}
-            onClick={() => setActiveCategory(category.id)}
-            className={`px-3 py-1 rounded-full text-sm font-medium ${activeCategory === category.id ? 'bg-green-400 text-white' : 'bg-gray-200 text-black'}`}
-          >
-            {category.name}
-          </button>
-        ))}
+
+        {categories
+          .filter((c) => c.id !== 6)
+          .map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
+              className={`px-3 py-1 rounded-full text-sm font-medium ${
+                activeCategory === category.id
+                  ? "bg-green-400 text-white"
+                  : "bg-gray-200 text-black"
+              }`}
+            >
+              {category.name}
+            </button>
+          ))}
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {filteredIngredients.map((item) => (
-          <IngredientCard
-            key={item.id}
-            ingredient={item}
-          />
+          <IngredientCard key={item.id} ingredient={item} />
         ))}
+      </div>
+
+      {/* ⭐ Dietary Legend (Task 6.8 requirement) */}
+      <div className="mt-6 text-sm text-gray-400 flex gap-6">
+        <span>
+          <strong className="text-green-400">G</strong> = Gluten-free
+        </span>
+        <span>
+          <strong className="text-green-400">L</strong> = Lactose-free
+        </span>
+        <span>
+          <strong className="text-green-400">V</strong> = Vegan
+        </span>
       </div>
     </div>
   );
