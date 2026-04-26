@@ -1,5 +1,7 @@
 // Task 2.12 - Verified by TM116
 import { useState } from "react";
+import { DndContext } from "@dnd-kit/core"; // ✅ NEW
+
 import type { Ingredient, Category } from "../types/index";
 import IngredientCard from "./IngredientCard";
 
@@ -17,74 +19,81 @@ function IngredientSection({
 
   const filteredIngredients = ingredients.filter((i) => {
     if (i.categoryId === 6) return false;
+
     const matchesCategory =
       activeCategory === "all" || i.categoryId === activeCategory;
+
     const matchesSearch = i.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
+
     return matchesCategory && matchesSearch;
   });
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Ingredients</h2>
+    // ✅ Wrap EVERYTHING with DndContext
+    <DndContext>
+      <div className="p-4">
+        <h2 className="text-xl font-bold mb-4">Ingredients</h2>
 
-      <input
-        type="text"
-        placeholder="Search ingredients..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full mb-4 px-4 py-2 rounded border border-gray-300 text-black"
-      />
+        <input
+          type="text"
+          placeholder="Search ingredients..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full mb-4 px-4 py-2 rounded border border-gray-300 text-black"
+        />
 
-      <div className="flex gap-2 flex-wrap mb-4">
-        <button
-          onClick={() => setActiveCategory("all")}
-          className={`px-3 py-1 rounded-full text-sm font-medium ${
-            activeCategory === "all"
-              ? "bg-green-400 text-white"
-              : "bg-gray-200 text-black"
-          }`}
-        >
-          All
-        </button>
+        <div className="flex gap-2 flex-wrap mb-4">
+          <button
+            onClick={() => setActiveCategory("all")}
+            className={`px-3 py-1 rounded-full text-sm font-medium ${
+              activeCategory === "all"
+                ? "bg-green-400 text-white"
+                : "bg-gray-200 text-black"
+            }`}
+          >
+            All
+          </button>
 
-        {categories
-          .filter((c) => c.id !== 6)
-          .map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`px-3 py-1 rounded-full text-sm font-medium ${
-                activeCategory === category.id
-                  ? "bg-green-400 text-white"
-                  : "bg-gray-200 text-black"
-              }`}
-            >
-              {category.name}
-            </button>
+          {categories
+            .filter((c) => c.id !== 6)
+            .map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  activeCategory === category.id
+                    ? "bg-green-400 text-white"
+                    : "bg-gray-200 text-black"
+                }`}
+              >
+                {category.name}
+              </button>
+            ))}
+        </div>
+
+        {/* ✅ Your draggable cards live inside this */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {filteredIngredients.map((item) => (
+            <IngredientCard key={item.id} ingredient={item} />
           ))}
-      </div>
+        </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {filteredIngredients.map((item) => (
-          <IngredientCard key={item.id} ingredient={item} />
-        ))}
+        {/* ⭐ Dietary Legend */}
+        <div className="mt-6 text-sm text-gray-400 flex gap-6">
+          <span>
+            <strong className="text-green-400">G</strong> = Gluten-free
+          </span>
+          <span>
+            <strong className="text-green-400">L</strong> = Lactose-free
+          </span>
+          <span>
+            <strong className="text-green-400">V</strong> = Vegan
+          </span>
+        </div>
       </div>
-
-      {/* ⭐ Dietary Legend (Task 6.8 requirement) */}
-      <div className="mt-6 text-sm text-gray-400 flex gap-6">
-        <span>
-          <strong className="text-green-400">G</strong> = Gluten-free
-        </span>
-        <span>
-          <strong className="text-green-400">L</strong> = Lactose-free
-        </span>
-        <span>
-          <strong className="text-green-400">V</strong> = Vegan
-        </span>
-      </div>
-    </div>
+    </DndContext>
   );
 }
 
