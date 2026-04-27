@@ -18,7 +18,6 @@ function IngredientSection({
   const filteredIngredients = ingredients.filter((i) => {
     if (!i) return false;
     if (i.categoryId === 6) return false;
-
     const matchesCategory =
       activeCategory === "all" || i.categoryId === activeCategory;
 
