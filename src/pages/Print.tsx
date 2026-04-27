@@ -1,12 +1,30 @@
 import { useIngredientStore } from "../store/useIngredientStore";
+import { usePriceStore } from "../store/usePriceStore";
 
 function Print() {
   const slots = useIngredientStore((s) => s.slots);
   const selectedBowl = useIngredientStore((s) => s.selectedBowl);
+  const selectedBase = useIngredientStore((s) => s.selectedBase);
+  const prices = usePriceStore((s) => s.prices);
 
   const ingredients = Object.values(slots).filter(
     (item) => item && typeof item === "object"
-  );
+  ) as any[];
+
+  const allItems = [
+    ...(selectedBase ? [selectedBase] : []),
+    ...ingredients,
+  ];
+
+  const getPrice = (item: any) => {
+    const priceItem = prices.find((p) => p.item_id === item.id);
+    return priceItem ? priceItem.price : (item.price ?? null);
+  };
+
+  const totalPrice = allItems.reduce((sum, item) => {
+    const p = getPrice(item);
+    return sum + (p ?? 0);
+  }, 0);
 
   return (
     <div className="p-6 text-black bg-white min-h-screen print-area">
@@ -20,7 +38,6 @@ function Print() {
         </button>
       </div>
 
-  
       <div className="max-w-md mx-auto border p-6 rounded shadow">
         <h1 className="text-xl font-bold text-center mb-4">
           🥗 Bowl Receipt
@@ -34,17 +51,30 @@ function Print() {
 
         <h2 className="font-semibold mb-2">Ingredients</h2>
 
-        <ul className="text-sm space-y-1">
-          {ingredients.length === 0 ? (
+        <ul className="text-sm space-y-2">
+          {allItems.length === 0 ? (
             <li>No ingredients selected</li>
           ) : (
-            ingredients.map((item: any, index) => (
-              <li key={index} className="flex justify-between">
-                <span>{item.name}</span>
-              </li>
-            ))
+            allItems.map((item: any, index) => {
+              const price = getPrice(item);
+              return (
+                <li key={index} className="flex justify-between">
+                  <span>{item.name}</span>
+                  <span className="text-gray-600">
+                    {price != null ? `${price.toFixed(2)} €` : "-"}
+                  </span>
+                </li>
+              );
+            })
           )}
         </ul>
+
+        <hr className="my-4" />
+
+        <div className="flex justify-between font-bold text-sm">
+          <span>Total</span>
+          <span>{totalPrice.toFixed(2)} €</span>
+        </div>
 
         <hr className="my-4" />
 
