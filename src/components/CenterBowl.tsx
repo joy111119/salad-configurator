@@ -58,7 +58,9 @@ function SlotContent({ ingredient }: { ingredient: any }) {
   );
 }
 
-function CenterBowl({ slots }: { slots: Record<string, any> }) {
+function CenterBowl({ slots: slotsProp }: { slots?: Record<string, any> }) {
+  const storeSlots = useIngredientStore((s) => s.slots);
+  const slots = slotsProp ?? storeSlots;
   const baseType = useIngredientStore((s) => s.baseType);
   const setBaseType = useIngredientStore((s) => s.setBaseType);
   const clearSelection = useIngredientStore((s) => s.clearSelection);
