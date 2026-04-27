@@ -99,3 +99,17 @@ export async function saveRecipe(token: string, recipeData: any) {
     throw error;
   }
 }
+
+// ⭐ NEW — Get Public Recipes (Community Page)
+export async function getRecipes() {
+  try {
+    const res = await fetch(`${BASE_URL}/recipes`);
+
+    if (!res.ok) throw new Error("Failed to fetch recipes");
+
+    return await res.json();
+  } catch (error) {
+    console.error("getRecipes error:", error);
+    return [];
+  }
+}

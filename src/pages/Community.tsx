@@ -1,59 +1,43 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useIngredientStore } from "../store/useIngredientStore";
-
-const BASE_URL = "https://fresse-api.onrender.com/api";
+import { getRecipes } from "../services/api"; // adjust path if needed
 
 type Recipe = {
   id: number;
   name: string;
   description?: string;
+  image_url?: string;
+  created_by?: string;
   ingredients: any[]; 
 };
 
 function Community() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const loadRecipe = useIngredientStore((s) => s.loadRecipe);
-  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    async function fetchRecipes() {
+    const loadRecipes = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/recipes`);
-
-        if (!res.ok) throw new Error("Failed to fetch recipes");
-
-        const data = await res.json();
+        const data = await getRecipes();
         setRecipes(data);
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        setError("Failed to load recipes");
       } finally {
         setLoading(false);
       }
-    }
+    };
 
-    fetchRecipes();
+    loadRecipes();
   }, []);
 
-  const handleLoad = (recipe: Recipe) => {
-    if (!recipe.ingredients || recipe.ingredients.length === 0) {
-      alert("This recipe has no ingredients");
-      return;
-    }
-
-    
-    loadRecipe(recipe.ingredients);
-
-    
-    navigate("/");
-  };
-
   if (loading) {
+    return <div className="p-4">Loading recipes...</div>;
+  }
+
+  if (error) {
     return (
-      <div className="p-10 text-white bg-zinc-900 min-h-screen">
-        Loading recipes...
+      <div className="p-4 text-red-500 font-semibold">
+        ⚠ {error}
       </div>
     );
   }
@@ -69,26 +53,35 @@ function Community() {
           {recipes.map((recipe) => (
             <div
               key={recipe.id}
-              className="bg-zinc-800 rounded-xl p-4 shadow-md flex flex-col justify-between"
+              className="bg-white rounded-xl shadow-md overflow-hidden hover:scale-105 transition-transform"
             >
-              <div>
-                <div className="h-32 bg-gray-300 flex items-center justify-center mb-3 rounded">
+              {/* Image */}
+              {recipe.image_url ? (
+                <img
+                  src={recipe.image_url}
+                  alt={recipe.name}
+                  className="w-full h-40 object-cover"
+                />
+              ) : (
+                <div className="w-full h-40 bg-gray-200 flex items-center justify-center">
                   No Image
                 </div>
+              )}
 
-                <h2 className="text-lg font-semibold">{recipe.name}</h2>
+              {/* Content */}
+              <div className="p-4">
+                <h3 className="text-lg font-semibold">{recipe.name}</h3>
 
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-600 mt-1">
                   {recipe.description || "No description available"}
                 </p>
-              </div>
 
-              <button
-                onClick={() => handleLoad(recipe)}
-                className="mt-4 bg-green-500 hover:bg-green-600 text-white py-2 rounded"
-              >
-                Load to Bowl
-              </button>
+                {recipe.created_by && (
+                  <p className="text-xs text-gray-400 mt-2">
+                    By {recipe.created_by}
+                  </p>
+                )}
+              </div>
             </div>
           ))}
         </div>
