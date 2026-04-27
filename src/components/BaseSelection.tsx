@@ -15,10 +15,6 @@ function BaseSelection({ ingredients = [] }: Props) {
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
  
-      <div className="bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center mb-4 shrink-0">
-        2
-      </div>
- 
       <h2 className="text-lg font-semibold mb-4 text-center">
         Valitse salaattipohja
       </h2>
@@ -27,7 +23,7 @@ function BaseSelection({ ingredients = [] }: Props) {
         {bases.map((base) => (
           <div
             key={base.id}
-            onClick={() => setBase(base)}
+            onClick={() => setBase(selectedBase?.id === base.id ? null : base)}
             className={`
               border-b pb-2 flex justify-end gap-4 items-center cursor-pointer
               ${

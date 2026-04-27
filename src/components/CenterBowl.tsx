@@ -39,6 +39,25 @@ function BowlDivider({ slotCount }: { slotCount: number }) {
   );
 }
 
+function SlotContent({ ingredient }: { ingredient: any }) {
+  if (!ingredient) return <span className="text-[10px] text-gray-400">Drop</span>;
+  return (
+    <div className="flex flex-col items-center">
+      {ingredient.image_url ? (
+        <img
+          src={ingredient.image_url}
+          alt={ingredient.name}
+          className="w-8 h-8 rounded-full object-cover border"
+        />
+      ) : (
+        <span className="text-xs bg-green-200 px-2 py-1 rounded">
+          {ingredient.name}
+        </span>
+      )}
+    </div>
+  );
+}
+
 function CenterBowl({ slots }: { slots: Record<string, any> }) {
   const baseType = useIngredientStore((s) => s.baseType);
   const setBaseType = useIngredientStore((s) => s.setBaseType);
@@ -46,30 +65,59 @@ function CenterBowl({ slots }: { slots: Record<string, any> }) {
   const selectedBowl = useIngredientStore((s) => s.selectedBowl);
 
   const handleClear = () => {
-    const confirmClear = window.confirm(
-      "Are you sure you want to empty the bowl?"
-    );
+    const confirmClear = window.confirm("Are you sure you want to empty the bowl?");
     if (confirmClear) clearSelection();
   };
 
   const slotCount = selectedBowl?.slot_count || 4;
+  const isSquare = selectedBowl?.shape === "square";
+
+  // Square bowl: 2-row grid layout
+  const squarePositions = (count: number) => {
+    const cols = Math.ceil(count / 2);
+    return Array.from({ length: count }, (_, i) => {
+      const row = Math.floor(i / cols);
+      const col = i % cols;
+      const totalRows = Math.ceil(count / cols);
+      return {
+        x: ((col + 0.5) / cols) * 100,
+        y: ((row + 0.5) / totalRows) * 100,
+      };
+    });
+  };
+
+  // Round bowl: circular layout
+  const circlePositions = (count: number) =>
+    Array.from({ length: count }, (_, i) => {
+      const angle = (i / count) * 2 * Math.PI;
+      return {
+        x: 50 + 30 * Math.cos(angle),
+        y: 50 + 30 * Math.sin(angle),
+      };
+    });
+
+  const positions = isSquare ? squarePositions(slotCount) : circlePositions(slotCount);
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] mt-4 lg:mt-0">
+    <div className="flex-1 flex flex-col items-center mt-4 lg:mt-0">
       {/* Base type buttons */}
       <div className="flex gap-3 mb-6 items-center">
         <button
           onClick={() => setBaseType(1)}
-          className={`px-4 py-2 rounded-full text-sm ${
-            baseType === 1 ? "bg-green-100" : "bg-gray-100"
+          className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
+            baseType === 1
+              ? "bg-green-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
           Salaatti
         </button>
         <button
           onClick={() => setBaseType(2)}
-          className={`px-4 py-2 rounded-full text-sm ${
-            baseType === 2 ? "bg-green-100" : "bg-gray-100"
+          className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
+            baseType === 2
+              ? "bg-green-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
           Rahka
@@ -81,50 +129,31 @@ function CenterBowl({ slots }: { slots: Record<string, any> }) {
         <button onClick={handleClear}>🗑️</button>
       </div>
 
-      {/* Bowl */}
-      <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 shadow-inner relative overflow-hidden">
-
+      {/* Bowl — shape changes based on round vs square */}
+      <div
+        className={`w-80 h-80 border-[12px] border-gray-200 bg-gray-50 shadow-inner relative overflow-hidden ${
+          isSquare ? "rounded-3xl" : "rounded-full"
+        }`}
+      >
         {/* Divider */}
         <BowlDivider slotCount={slotCount} />
 
-        {/* 🔥 DROPPABLE SLOTS */}
-        {[...Array(slotCount)].map((_, i) => {
-          const angle = (i / slotCount) * 2 * Math.PI;
-          const x = 50 + 35 * Math.cos(angle);
-          const y = 50 + 35 * Math.sin(angle);
-
+        {/* Droppable slots */}
+        {positions.map((pos, i) => {
           const slotId = `slot-${i}`;
-          const ingredient = slots[slotId]; // ✅ cleaner
-
           return (
             <div
               key={slotId}
               style={{
                 position: "absolute",
-                left: `${x}%`,
-                top: `${y}%`,
+                left: `${pos.x}%`,
+                top: `${pos.y}%`,
                 transform: "translate(-50%, -50%)",
                 zIndex: 40,
               }}
             >
               <BowlSlot id={slotId}>
-                {ingredient ? (
-                  <div className="flex flex-col items-center">
-                    {ingredient.image_url ? (
-                      <img
-                        src={ingredient.image_url}
-                        alt={ingredient.name}
-                        className="w-10 h-10 rounded-full object-cover border"
-                      />
-                    ) : (
-                      <span className="text-xs bg-green-200 px-2 py-1 rounded">
-                        {ingredient.name}
-                      </span>
-                    )}
-                  </div>
-                ) : (
-                  <span className="text-[10px] text-gray-400">Drop</span>
-                )}
+                <SlotContent ingredient={slots[slotId]} />
               </BowlSlot>
             </div>
           );
@@ -133,7 +162,11 @@ function CenterBowl({ slots }: { slots: Record<string, any> }) {
 
       {/* Info */}
       <div className="mt-6 text-center text-sm text-gray-600">
-        <p>{selectedBowl ? selectedBowl.volume : 0} ml</p>
+        <p>
+          {selectedBowl
+            ? `${selectedBowl.name} — ${selectedBowl.volume} ml`
+            : "No bowl selected"}
+        </p>
       </div>
     </div>
   );

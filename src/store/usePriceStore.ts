@@ -10,14 +10,14 @@ export type Price = {
 // ✅ Define store type
 type PriceStore = {
   prices: Price[];
-  fetchPrices: (token: string) => Promise<void>;
+  fetchPrices: (token?: string) => Promise<void>;
 };
 
 // ✅ Apply type to Zustand
 export const usePriceStore = create<PriceStore>((set) => ({
   prices: [],
 
-  fetchPrices: async (token: string) => {
+  fetchPrices: async (token = "") => {
     try {
       const data: Price[] = await getPrices(token);
       set({ prices: data });

@@ -6,6 +6,8 @@ import { calculateTotalWeight } from "../utils/calculations";
 function SummaryBar() {
   const slots = useIngredientStore((s) => s.slots);
   const clearSlot = useIngredientStore((s) => s.clearSlot);
+  const selectedBase = useIngredientStore((s) => s.selectedBase);
+  const setBase = useIngredientStore((s) => s.setBase);
 
   const prices = usePriceStore((s) => s.prices);
 
@@ -14,16 +16,22 @@ function SummaryBar() {
     .filter(([_, item]) => item !== null)
     .map(([slotKey, item]) => ({ slotKey, ingredient: item! }));
 
+  // All items including base for weight + price
+  const allIngredients = [
+    ...(selectedBase ? [selectedBase] : []),
+    ...activeItems.map((i) => i.ingredient),
+  ];
+
   // Total weight
-  const totalWeight = calculateTotalWeight(
-    activeItems.map((i) => i.ingredient)
-  );
+  const totalWeight = calculateTotalWeight(allIngredients);
 
   // Total price
-  const totalPrice = activeItems.reduce((sum, { ingredient }) => {
+  const totalPrice = allIngredients.reduce((sum, ingredient) => {
     const priceItem = prices.find((p) => p.item_id === ingredient.id);
-    return sum + (priceItem ? priceItem.price : 0);
+    return sum + (priceItem ? priceItem.price : ingredient.price ?? 0);
   }, 0);
+
+  const totalCount = activeItems.length + (selectedBase ? 1 : 0);
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full flex flex-col md:flex-row gap-8 shadow-xl">
@@ -31,28 +39,42 @@ function SummaryBar() {
       {/* Selected Ingredients */}
       <div className="flex-1 bg-[#3a3a3a] rounded-3xl p-6 min-h-[150px] shadow-inner">
         <h3 className="text-lg font-semibold mb-4">
-          Selected ingredients ({activeItems.length})
+          Selected ingredients ({totalCount})
         </h3>
 
         <ul className="space-y-2 text-sm text-gray-300">
-          {activeItems.length === 0 ? (
+          {totalCount === 0 ? (
             <li className="text-gray-500">No ingredients selected</li>
           ) : (
-            activeItems.map(({ slotKey, ingredient }) => (
-              <li
-                key={slotKey}
-                className="flex items-center justify-between"
-              >
-                <span>{ingredient.name}</span>
-
-                <button
-                  onClick={() => clearSlot(slotKey)}
-                  className="ml-4 text-red-400 hover:text-red-600 font-bold text-xs"
+            <>
+              {selectedBase && (
+                <li className="flex items-center justify-between border-b border-gray-600 pb-2 mb-2">
+                  <span className="text-green-400 font-medium">
+                    Base: {selectedBase.name}
+                  </span>
+                  <button
+                    onClick={() => (setBase as any)(null)}
+                    className="ml-4 text-red-400 hover:text-red-600 font-bold text-xs"
+                  >
+                    x
+                  </button>
+                </li>
+              )}
+              {activeItems.map(({ slotKey, ingredient }) => (
+                <li
+                  key={slotKey}
+                  className="flex items-center justify-between"
                 >
-                  x
-                </button>
-              </li>
-            ))
+                  <span>{ingredient.name}</span>
+                  <button
+                    onClick={() => clearSlot(slotKey)}
+                    className="ml-4 text-red-400 hover:text-red-600 font-bold text-xs"
+                  >
+                    x
+                  </button>
+                </li>
+              ))}
+            </>
           )}
         </ul>
       </div>

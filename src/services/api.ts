@@ -1,8 +1,25 @@
 const BASE_URL = "https://fresse-api.onrender.com/api";
+const AUTH_URL = import.meta.env.VITE_AUTH_URL ?? "http://localhost:3001/api";
+
+// Register
+export async function register(name: string, email: string, password: string) {
+  const res = await fetch(`${AUTH_URL}/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, password }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || "Registration failed");
+  }
+
+  return await res.json();
+}
 
 // Login
 export async function login(email: string, password: string) {
-  const res = await fetch(`${BASE_URL}/auth/login`, {
+  const res = await fetch(`${AUTH_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
@@ -64,7 +81,7 @@ export async function getIngredients() {
 // ⭐ Protected Prices (Task 5.4)
 export async function getPrices(token: string) {
   try {
-    const res = await fetch(`${BASE_URL}/prices`, {
+    const res = await fetch(`${AUTH_URL}/prices`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

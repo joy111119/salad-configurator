@@ -22,9 +22,6 @@ const IngredientCard: React.FC<Props> = ({ ingredient }) => {
   const prices = usePriceStore((state: { prices: Price[] }) => state.prices);
   const priceItem = prices.find((p: Price) => p.item_id === ingredient.id);
 
-  const token = localStorage.getItem("token");
-  const isLoggedIn = Boolean(token);
-
   // ✅ DRAG ENABLED AGAIN
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -48,19 +45,28 @@ const IngredientCard: React.FC<Props> = ({ ingredient }) => {
         if (!isDragging) addIngredient(ingredient);
       }}
     >
+      {ingredient.image_url && (
+        <img
+          src={ingredient.image_url}
+          alt={ingredient.name}
+          style={styles.image}
+          draggable={false}
+        />
+      )}
+
       <div style={styles.name}>{ingredient.name}</div>
 
       <div style={{ fontSize: "12px", marginTop: "4px" }}>
-        {isLoggedIn ? (
-          priceItem ? (
-            <span style={{ color: "green", fontWeight: "bold" }}>
-              + {priceItem.price.toFixed(2)} €
-            </span>
-          ) : (
-            <span style={{ color: "#888" }}>No price available</span>
-          )
+        {priceItem ? (
+          <span style={{ color: "green", fontWeight: "bold" }}>
+            + {priceItem.price.toFixed(2)} €
+          </span>
+        ) : ingredient.price != null ? (
+          <span style={{ color: "green", fontWeight: "bold" }}>
+            + {ingredient.price.toFixed(2)} €
+          </span>
         ) : (
-          <span style={{ color: "#888" }}>Login to see price</span>
+          <span style={{ color: "#888" }}>No price available</span>
         )}
       </div>
 
@@ -78,9 +84,15 @@ const IngredientCard: React.FC<Props> = ({ ingredient }) => {
 export default IngredientCard;
 
 const styles: { [key: string]: React.CSSProperties } = {
+  image: {
+    width: "80px",
+    height: "80px",
+    objectFit: "cover" as const,
+    borderRadius: "8px",
+  },
   card: {
     width: "140px",
-    height: "160px",
+    height: "180px",
     border: "1px solid #ddd",
     borderRadius: "12px",
     padding: "10px",
@@ -90,10 +102,13 @@ const styles: { [key: string]: React.CSSProperties } = {
     alignItems: "center",
     backgroundColor: "#ffffff",
     boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+    color: "#333",
   },
   name: {
     fontWeight: "bold",
     fontSize: "14px",
+    textAlign: "center",
+    color: "#333",
   },
   diets: {
     display: "flex",

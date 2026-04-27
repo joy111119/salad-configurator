@@ -9,6 +9,8 @@ import SummaryBar from "../components/SummaryBar";
 import Modal from "../components/Modal";
 
 import { useIngredientStore } from "../store/useIngredientStore";
+import { usePriceStore } from "../store/usePriceStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 import type { Bowl, Category, Ingredient } from "../types/index";
 import {
@@ -27,6 +29,9 @@ function Configurator() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const fetchPrices = usePriceStore((s) => s.fetchPrices);
+  const token = useAuthStore((s) => s.token);
+
   // ✅ USE STORE INSTEAD OF LOCAL STATE
   const baseType = useIngredientStore((s) => s.baseType);
   const slots = useIngredientStore((s) => s.slots);
@@ -42,7 +47,11 @@ function Configurator() {
           getBaseIngredients(),
         ]);
 
-        setBowls(b);
+        const correctedBowls = b.map((bowl: Bowl) => ({
+          ...bowl,
+          slot_count: bowl.name.toLowerCase().includes("matala") ? 4 : 6,
+        }));
+        setBowls(correctedBowls);
         setCategories(c);
         setIngredients(i);
         setBases(bi);
@@ -55,6 +64,10 @@ function Configurator() {
 
     loadData();
   }, [baseType]);
+
+  useEffect(() => {
+    if (token) fetchPrices(token);
+  }, [token]);
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;

@@ -1,0 +1,358 @@
+[
+  {
+    "item_id": 100,
+    "price": 0.8
+  },
+  {
+    "item_id": 101,
+    "price": 1
+  },
+  {
+    "item_id": 102,
+    "price": 1.2
+  },
+  {
+    "item_id": 103,
+    "price": 1.4
+  },
+  {
+    "item_id": 104,
+    "price": 1.6
+  },
+  {
+    "item_id": 105,
+    "price": 1.8
+  },
+  {
+    "item_id": 106,
+    "price": 2
+  },
+  {
+    "item_id": 107,
+    "price": 2.2
+  },
+  {
+    "item_id": 108,
+    "price": 2.4
+  },
+  {
+    "item_id": 109,
+    "price": 2.6
+  },
+  {
+    "item_id": 110,
+    "price": 0.8
+  },
+  {
+    "item_id": 111,
+    "price": 1
+  },
+  {
+    "item_id": 112,
+    "price": 1.2
+  },
+  {
+    "item_id": 113,
+    "price": 1.4
+  },
+  {
+    "item_id": 114,
+    "price": 1.6
+  },
+  {
+    "item_id": 115,
+    "price": 1.8
+  },
+  {
+    "item_id": 116,
+    "price": 2
+  },
+  {
+    "item_id": 117,
+    "price": 2.2
+  },
+  {
+    "item_id": 118,
+    "price": 2.4
+  },
+  {
+    "item_id": 119,
+    "price": 2.6
+  },
+  {
+    "item_id": 120,
+    "price": 0.8
+  },
+  {
+    "item_id": 121,
+    "price": 1
+  },
+  {
+    "item_id": 122,
+    "price": 1.2
+  },
+  {
+    "item_id": 128,
+    "price": 1.4
+  },
+  {
+    "item_id": 129,
+    "price": 1.6
+  },
+  {
+    "item_id": 130,
+    "price": 1.8
+  },
+  {
+    "item_id": 131,
+    "price": 2
+  },
+  {
+    "item_id": 132,
+    "price": 2.2
+  },
+  {
+    "item_id": 133,
+    "price": 2.4
+  },
+  {
+    "item_id": 134,
+    "price": 2.6
+  },
+  {
+    "item_id": 135,
+    "price": 0.8
+  },
+  {
+    "item_id": 136,
+    "price": 1
+  },
+  {
+    "item_id": 137,
+    "price": 1.2
+  },
+  {
+    "item_id": 138,
+    "price": 1.4
+  },
+  {
+    "item_id": 139,
+    "price": 1.6
+  },
+  {
+    "item_id": 140,
+    "price": 1.8
+  },
+  {
+    "item_id": 141,
+    "price": 2
+  },
+  {
+    "item_id": 142,
+    "price": 2.2
+  },
+  {
+    "item_id": 143,
+    "price": 2.4
+  },
+  {
+    "item_id": 144,
+    "price": 2.6
+  },
+  {
+    "item_id": 145,
+    "price": 0.8
+  },
+  {
+    "item_id": 146,
+    "price": 1
+  },
+  {
+    "item_id": 147,
+    "price": 1.2
+  },
+  {
+    "item_id": 148,
+    "price": 1.4
+  },
+  {
+    "item_id": 149,
+    "price": 1.6
+  },
+  {
+    "item_id": 150,
+    "price": 1.8
+  },
+  {
+    "item_id": 151,
+    "price": 2
+  },
+  {
+    "item_id": 152,
+    "price": 2.2
+  },
+  {
+    "item_id": 153,
+    "price": 2.4
+  },
+  {
+    "item_id": 154,
+    "price": 2.6
+  },
+  {
+    "item_id": 155,
+    "price": 0.8
+  },
+  {
+    "item_id": 156,
+    "price": 1
+  },
+  {
+    "item_id": 157,
+    "price": 1.2
+  },
+  {
+    "item_id": 158,
+    "price": 1.4
+  },
+  {
+    "item_id": 159,
+    "price": 1.6
+  },
+  {
+    "item_id": 160,
+    "price": 1.8
+  },
+  {
+    "item_id": 161,
+    "price": 2
+  },
+  {
+    "item_id": 162,
+    "price": 2.2
+  },
+  {
+    "item_id": 163,
+    "price": 2.4
+  },
+  {
+    "item_id": 164,
+    "price": 2.6
+  },
+  {
+    "item_id": 165,
+    "price": 0.8
+  },
+  {
+    "item_id": 166,
+    "price": 1
+  },
+  {
+    "item_id": 167,
+    "price": 1.2
+  },
+  {
+    "item_id": 168,
+    "price": 1.4
+  },
+  {
+    "item_id": 169,
+    "price": 1.6
+  },
+  {
+    "item_id": 170,
+    "price": 1.8
+  },
+  {
+    "item_id": 171,
+    "price": 2
+  },
+  {
+    "item_id": 172,
+    "price": 2.2
+  },
+  {
+    "item_id": 173,
+    "price": 2.4
+  },
+  {
+    "item_id": 174,
+    "price": 2.6
+  },
+  {
+    "item_id": 175,
+    "price": 0.8
+  },
+  {
+    "item_id": 176,
+    "price": 1
+  },
+  {
+    "item_id": 177,
+    "price": 1.2
+  },
+  {
+    "item_id": 178,
+    "price": 1.4
+  },
+  {
+    "item_id": 179,
+    "price": 1.6
+  },
+  {
+    "item_id": 180,
+    "price": 1.8
+  },
+  {
+    "item_id": 181,
+    "price": 2
+  },
+  {
+    "item_id": 182,
+    "price": 2.2
+  },
+  {
+    "item_id": 183,
+    "price": 2.4
+  },
+  {
+    "item_id": 184,
+    "price": 2.6
+  },
+  {
+    "item_id": 185,
+    "price": 0.8
+  },
+  {
+    "item_id": 186,
+    "price": 1
+  },
+  {
+    "item_id": 187,
+    "price": 1.2
+  },
+  {
+    "item_id": 188,
+    "price": 1.4
+  },
+  {
+    "item_id": 189,
+    "price": 1.6
+  },
+  {
+    "item_id": 190,
+    "price": 1.8
+  },
+  {
+    "item_id": 191,
+    "price": 2
+  },
+  {
+    "item_id": 192,
+    "price": 2.2
+  },
+  {
+    "item_id": 193,
+    "price": 2.4
+  }
+]

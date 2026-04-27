@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Modal from './Modal';
-import { login as loginApi } from '../services/api';
+import { login as loginApi, register as registerApi } from '../services/api';
 import { useAuthStore } from '../store/useAuthStore';
 
 interface Props {
@@ -9,31 +9,90 @@ interface Props {
 }
 
 function LoginModal({ isOpen, onClose }: Props) {
+  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const login = useAuthStore((s) => s.login);
+
+  function reset() {
+    setName('');
+    setEmail('');
+    setPassword('');
+    setError('');
+    setSuccess('');
+  }
+
+  function switchMode(m: 'login' | 'register') {
+    reset();
+    setMode(m);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
     try {
-      const data = await loginApi(email, password);
-      login(data.token, data.name);
-      setEmail('');
-      setPassword('');
-      onClose();
-    } catch {
-      setError('Invalid email or password.');
+      if (mode === 'register') {
+        const data = await registerApi(name, email, password);
+        login(data.token, data.name);
+        setSuccess(`Account created! Welcome, ${data.name}`);
+        setTimeout(() => { reset(); onClose(); }, 1200);
+      } else {
+        const data = await loginApi(email, password);
+        login(data.token, data.name);
+        reset();
+        onClose();
+      }
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong.');
     }
   }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <h2 className="text-xl font-bold mb-6 text-black">Login</h2>
+      {/* Tabs */}
+      <div className="flex mb-6 border-b border-gray-200">
+        <button
+          onClick={() => switchMode('login')}
+          className={`flex-1 pb-2 font-semibold text-sm transition-colors ${
+            mode === 'login'
+              ? 'border-b-2 border-green-500 text-green-600'
+              : 'text-gray-400 hover:text-gray-600'
+          }`}
+        >
+          Login
+        </button>
+        <button
+          onClick={() => switchMode('register')}
+          className={`flex-1 pb-2 font-semibold text-sm transition-colors ${
+            mode === 'register'
+              ? 'border-b-2 border-green-500 text-green-600'
+              : 'text-gray-400 hover:text-gray-600'
+          }`}
+        >
+          Register
+        </button>
+      </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {mode === 'register' && (
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+              className="px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:border-green-400"
+              required
+            />
+          </div>
+        )}
+
         <div className="flex flex-col gap-1">
           <label className="text-sm font-medium text-gray-700">Email</label>
           <input
@@ -59,12 +118,13 @@ function LoginModal({ isOpen, onClose }: Props) {
         </div>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
+        {success && <p className="text-green-600 text-sm font-medium">{success}</p>}
 
         <button
           type="submit"
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg mt-2"
         >
-          Login
+          {mode === 'login' ? 'Login' : 'Create Account'}
         </button>
       </form>
     </Modal>

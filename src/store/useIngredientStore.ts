@@ -8,7 +8,7 @@ interface IngredientStore {
 
   selectedBase: Ingredient | null;
 
-  setBase: (base: Ingredient) => void;
+  setBase: (base: Ingredient | null) => void;
   setBaseType: (id: number) => void;
   setBowl: (bowl: Bowl) => void;
 
@@ -42,7 +42,7 @@ export const useIngredientStore = create<IngredientStore>((set) => ({
   selectedBowl: null,
   selectedBase: null,
 
-  setBase: (base) => set({ selectedBase: base }),
+  setBase: (base) => set({ selectedBase: base ?? null }),
 
   setBaseType: (id) => set({ baseType: id }),
 

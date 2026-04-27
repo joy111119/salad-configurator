@@ -12,8 +12,8 @@ function BowlSlot({ id, children }: Props) {
     <div
       ref={setNodeRef}
       style={{
-        width: "120px",
-        height: "120px",
+        width: "70px",
+        height: "70px",
         borderRadius: "50%",
         border: "2px dashed #ccc",
         backgroundColor: isOver ? "rgba(0,255,0,0.2)" : "transparent",

@@ -10,7 +10,7 @@ export default function BowlSelection({ bowls = [] }: Props) {
   const selectedBowl = useIngredientStore((s) => s.selectedBowl);
 
   return (
-    <div className="p-4 border rounded w-full lg:w-1/3">
+    <div className="p-4 border rounded w-full lg:w-1/4">
       <h2 className="text-xl font-bold mb-4">Select Bowl</h2>
 
       <div className="flex flex-col gap-2">
