@@ -7,6 +7,7 @@ type Recipe = {
   description?: string;
   image_url?: string;
   created_by?: string;
+  ingredients: any[]; 
 };
 
 function Community() {
@@ -42,8 +43,8 @@ function Community() {
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Community Recipes</h2>
+    <div className="p-10 pt-6 text-white bg-zinc-900 min-h-[calc(100vh-120px)]">
+      <h1 className="text-3xl font-bold mb-6">Community Recipes</h1>
 
       {recipes.length === 0 ? (
         <p>No recipes found.</p>
