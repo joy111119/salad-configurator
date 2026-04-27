@@ -1,7 +1,10 @@
 import React from "react";
 import type { Ingredient } from "../types/index";
 import { useIngredientStore } from "../store/useIngredientStore";
-import { usePriceStore, type Price } from "../store/usePriceStore"; // ✅ import Price type
+import { usePriceStore, type Price } from "../store/usePriceStore";
+
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   ingredient: Ingredient;
@@ -16,20 +19,38 @@ const dietLabels: Record<string, string> = {
 const IngredientCard: React.FC<Props> = ({ ingredient }) => {
   const addIngredient = useIngredientStore((s) => s.addIngredient);
 
-  // ✅ Explicitly type state (fixes "unknown")
   const prices = usePriceStore((state: { prices: Price[] }) => state.prices);
-
-  // ✅ Explicitly type p (fixes "any")
   const priceItem = prices.find((p: Price) => p.item_id === ingredient.id);
 
   const token = localStorage.getItem("token");
   const isLoggedIn = Boolean(token);
 
+  // ✅ DRAG ENABLED AGAIN
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: ingredient.id.toString(),
+      data: ingredient, // 🔥 critical
+    });
+
+  const dragStyle: React.CSSProperties = {
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.7 : 1,
+    cursor: "grab",
+  };
+
   return (
-    <div style={styles.card} onClick={() => addIngredient(ingredient)}>
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{ ...styles.card, ...dragStyle }}
+      onClick={() => {
+        if (!isDragging) addIngredient(ingredient);
+      }}
+    >
       <div style={styles.name}>{ingredient.name}</div>
 
-      <div style={{ fontSize: "12px", marginTop: "4px", color: "#333" }}>
+      <div style={{ fontSize: "12px", marginTop: "4px" }}>
         {isLoggedIn ? (
           priceItem ? (
             <span style={{ color: "green", fontWeight: "bold" }}>
@@ -69,13 +90,10 @@ const styles: { [key: string]: React.CSSProperties } = {
     alignItems: "center",
     backgroundColor: "#ffffff",
     boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-    cursor: "pointer",
   },
   name: {
     fontWeight: "bold",
-    textAlign: "center",
     fontSize: "14px",
-    color: "#000000",
   },
   diets: {
     display: "flex",
