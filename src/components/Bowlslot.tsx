@@ -2,10 +2,9 @@ import { useDroppable } from "@dnd-kit/core";
 
 type Props = {
   id: string;
-  children?: React.ReactNode;
 };
 
-function BowlSlot({ id, children }: Props) {
+function BowlSlot({ id }: Props) {
   const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
@@ -15,15 +14,10 @@ function BowlSlot({ id, children }: Props) {
         width: "70px",
         height: "70px",
         borderRadius: "50%",
-        border: "2px dashed #ccc",
-        backgroundColor: isOver ? "rgba(0,255,0,0.2)" : "transparent",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        backgroundColor: isOver ? "rgba(0, 200, 0, 0.2)" : "transparent",
+        border: isOver ? "2px solid rgba(0, 200, 0, 0.7)" : "2px solid transparent",
       }}
-    >
-      {children}
-    </div>
+    />
   );
 }
 

@@ -1,61 +1,34 @@
 import { useIngredientStore } from "../store/useIngredientStore";
-import BowlSlot from "./Bowlslot"; // ✅ FIXED casing
+import BowlSlot from "./Bowlslot";
 
-function BowlDivider({ slotCount }: { slotCount: number }) {
-  const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
-  const cx = 50;
-  const cy = 50;
-  const r = 50;
-  const lineCount = slotCount / 2;
+const CX = 50, CY = 50, R = 50;
 
-  for (let i = 0; i < lineCount; i++) {
-    const angle = (i * Math.PI) / lineCount;
-    lines.push({
-      x1: cx + r * Math.cos(angle),
-      y1: cy + r * Math.sin(angle),
-      x2: cx - r * Math.cos(angle),
-      y2: cy - r * Math.sin(angle),
-    });
-  }
-
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      className="absolute inset-0 w-full h-full z-20 pointer-events-none"
-    >
-      {lines.map((l, i) => (
-        <line
-          key={i}
-          x1={l.x1}
-          y1={l.y1}
-          x2={l.x2}
-          y2={l.y2}
-          stroke="white"
-          strokeWidth="1.5"
-          strokeOpacity="0.6"
-        />
-      ))}
-    </svg>
-  );
+function wedgePath(index: number, total: number): string {
+  const start = (index / total) * 2 * Math.PI - Math.PI / 2;
+  const end = ((index + 1) / total) * 2 * Math.PI - Math.PI / 2;
+  const x1 = (CX + R * Math.cos(start)).toFixed(3);
+  const y1 = (CY + R * Math.sin(start)).toFixed(3);
+  const x2 = (CX + R * Math.cos(end)).toFixed(3);
+  const y2 = (CY + R * Math.sin(end)).toFixed(3);
+  const large = end - start > Math.PI ? 1 : 0;
+  return `M ${CX} ${CY} L ${x1} ${y1} A ${R} ${R} 0 ${large} 1 ${x2} ${y2} Z`;
 }
 
-function SlotContent({ ingredient }: { ingredient: any }) {
-  if (!ingredient) return <span className="text-[10px] text-gray-400">Drop</span>;
-  return (
-    <div className="flex flex-col items-center">
-      {ingredient.image_url ? (
-        <img
-          src={ingredient.image_url}
-          alt={ingredient.name}
-          className="w-8 h-8 rounded-full object-cover border"
-        />
-      ) : (
-        <span className="text-xs bg-green-200 px-2 py-1 rounded">
-          {ingredient.name}
-        </span>
-      )}
-    </div>
-  );
+function circlePositions(count: number) {
+  return Array.from({ length: count }, (_, i) => {
+    // Use midpoint of each wedge so drop zone aligns with the dashed ring marker
+    const angle = ((i + 0.5) / count) * 2 * Math.PI - Math.PI / 2;
+    return { x: 50 + 30 * Math.cos(angle), y: 50 + 30 * Math.sin(angle) };
+  });
+}
+
+function squarePositions(count: number) {
+  const cols = Math.ceil(count / 2);
+  const totalRows = Math.ceil(count / cols);
+  return Array.from({ length: count }, (_, i) => ({
+    x: ((i % cols + 0.5) / cols) * 100,
+    y: ((Math.floor(i / cols) + 0.5) / totalRows) * 100,
+  }));
 }
 
 function CenterBowl({ slots: slotsProp }: { slots?: Record<string, any> }) {
@@ -65,39 +38,14 @@ function CenterBowl({ slots: slotsProp }: { slots?: Record<string, any> }) {
   const setBaseType = useIngredientStore((s) => s.setBaseType);
   const clearSelection = useIngredientStore((s) => s.clearSelection);
   const selectedBowl = useIngredientStore((s) => s.selectedBowl);
+  const selectedBase = useIngredientStore((s) => s.selectedBase);
 
   const handleClear = () => {
-    const confirmClear = window.confirm("Are you sure you want to empty the bowl?");
-    if (confirmClear) clearSelection();
+    if (window.confirm("Are you sure you want to empty the bowl?")) clearSelection();
   };
 
   const slotCount = selectedBowl?.slot_count || 4;
   const isSquare = selectedBowl?.shape === "square";
-
-  // Square bowl: 2-row grid layout
-  const squarePositions = (count: number) => {
-    const cols = Math.ceil(count / 2);
-    return Array.from({ length: count }, (_, i) => {
-      const row = Math.floor(i / cols);
-      const col = i % cols;
-      const totalRows = Math.ceil(count / cols);
-      return {
-        x: ((col + 0.5) / cols) * 100,
-        y: ((row + 0.5) / totalRows) * 100,
-      };
-    });
-  };
-
-  // Round bowl: circular layout
-  const circlePositions = (count: number) =>
-    Array.from({ length: count }, (_, i) => {
-      const angle = (i / count) * 2 * Math.PI;
-      return {
-        x: 50 + 30 * Math.cos(angle),
-        y: 50 + 30 * Math.sin(angle),
-      };
-    });
-
   const positions = isSquare ? squarePositions(slotCount) : circlePositions(slotCount);
 
   return (
@@ -107,9 +55,7 @@ function CenterBowl({ slots: slotsProp }: { slots?: Record<string, any> }) {
         <button
           onClick={() => setBaseType(1)}
           className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
-            baseType === 1
-              ? "bg-green-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            baseType === 1 ? "bg-green-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
           Salaatti
@@ -117,30 +63,170 @@ function CenterBowl({ slots: slotsProp }: { slots?: Record<string, any> }) {
         <button
           onClick={() => setBaseType(2)}
           className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
-            baseType === 2
-              ? "bg-green-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            baseType === 2 ? "bg-green-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
           Rahka
         </button>
       </div>
 
-      {/* Actions */}
       <div className="flex gap-4 mb-4 text-xl">
-        <button onClick={handleClear}>🗑️</button>
+        <button onClick={handleClear} title="Clear bowl">🗑️</button>
       </div>
 
-      {/* Bowl — shape changes based on round vs square */}
+      {/* Bowl */}
       <div
-        className={`w-80 h-80 border-[12px] border-gray-200 bg-gray-50 shadow-inner relative overflow-hidden ${
-          isSquare ? "rounded-3xl" : "rounded-full"
+        className={`w-80 h-80 relative overflow-hidden shadow-lg ${
+          isSquare
+            ? "rounded-3xl border-[14px] border-[#c8a97a] bg-[#f5f0e8]"
+            : "rounded-full border-[14px] border-[#c8a97a] bg-[#f5f0e8]"
         }`}
       >
-        {/* Divider */}
-        <BowlDivider slotCount={slotCount} />
+        {/* ── ROUND BOWL: SVG wedge visualization ── */}
+        {!isSquare && (
+          <svg
+            viewBox="0 0 100 100"
+            className="absolute inset-0 w-full h-full"
+            style={{ zIndex: 10 }}
+          >
+            <defs>
+              <clipPath id="bowl-circle-clip">
+                <circle cx={CX} cy={CY} r={R} />
+              </clipPath>
+              {Array.from({ length: slotCount }, (_, i) => (
+                <clipPath key={i} id={`wedge-clip-${i}`}>
+                  <path d={wedgePath(i, slotCount)} />
+                </clipPath>
+              ))}
+            </defs>
 
-        {/* Droppable slots */}
+            {/* Bowl inner fill */}
+            <circle cx={CX} cy={CY} r={R} fill="#f0ebe0" />
+
+            {/* Base image fills the entire bowl */}
+            {selectedBase?.image_url && (
+              <image
+                href={selectedBase.image_url}
+                x="0" y="0" width="100" height="100"
+                clipPath="url(#bowl-circle-clip)"
+                preserveAspectRatio="xMidYMid slice"
+              />
+            )}
+
+            {/* Ingredient image per wedge segment */}
+            {Array.from({ length: slotCount }, (_, i) => {
+              const ingredient = slots[`slot-${i}`];
+              if (!ingredient?.image_url) return null;
+              return (
+                <image
+                  key={i}
+                  href={ingredient.image_url}
+                  x="0" y="0" width="100" height="100"
+                  clipPath={`url(#wedge-clip-${i})`}
+                  preserveAspectRatio="xMidYMid slice"
+                />
+              );
+            })}
+
+            {/* Dashed ring marker for empty slots */}
+            {Array.from({ length: slotCount }, (_, i) => {
+              if (slots[`slot-${i}`]) return null;
+              const mid = ((i + 0.5) / slotCount) * 2 * Math.PI - Math.PI / 2;
+              return (
+                <circle
+                  key={i}
+                  cx={(CX + 30 * Math.cos(mid)).toFixed(2)}
+                  cy={(CY + 30 * Math.sin(mid)).toFixed(2)}
+                  r="7"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="1"
+                  strokeDasharray="2 2"
+                  strokeOpacity="0.6"
+                />
+              );
+            })}
+
+            {/* Divider lines from center to edge */}
+            {Array.from({ length: slotCount }, (_, i) => {
+              const angle = (i / slotCount) * 2 * Math.PI - Math.PI / 2;
+              return (
+                <line
+                  key={i}
+                  x1={CX} y1={CY}
+                  x2={(CX + R * Math.cos(angle)).toFixed(3)}
+                  y2={(CY + R * Math.sin(angle)).toFixed(3)}
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeOpacity="0.8"
+                />
+              );
+            })}
+          </svg>
+        )}
+
+        {/* ── SQUARE BOWL: base + ingredient images filling each grid cell ── */}
+        {isSquare && (() => {
+          const cols = Math.ceil(slotCount / 2);
+          const totalRows = Math.ceil(slotCount / cols);
+          const cellW = 100 / cols;
+          const cellH = 100 / totalRows;
+          return (
+            <svg
+              viewBox="0 0 100 100"
+              className="absolute inset-0 w-full h-full"
+              style={{ zIndex: 10, pointerEvents: "none" }}
+            >
+              {/* Base image fills entire bowl */}
+              {selectedBase?.image_url && (
+                <image
+                  href={selectedBase.image_url}
+                  x="0" y="0" width="100" height="100"
+                  preserveAspectRatio="xMidYMid slice"
+                />
+              )}
+
+              {/* Each ingredient fills its grid cell */}
+              {Array.from({ length: slotCount }, (_, i) => {
+                const ingredient = slots[`slot-${i}`];
+                if (!ingredient?.image_url) return null;
+                const col = i % cols;
+                const row = Math.floor(i / cols);
+                return (
+                  <image
+                    key={i}
+                    href={ingredient.image_url}
+                    x={(col * cellW).toFixed(2)}
+                    y={(row * cellH).toFixed(2)}
+                    width={cellW.toFixed(2)}
+                    height={cellH.toFixed(2)}
+                    preserveAspectRatio="xMidYMid slice"
+                  />
+                );
+              })}
+
+              {/* Grid divider lines */}
+              {Array.from({ length: cols - 1 }, (_, c) => (
+                <line
+                  key={`v${c}`}
+                  x1={((c + 1) * cellW).toFixed(2)} y1="0"
+                  x2={((c + 1) * cellW).toFixed(2)} y2="100"
+                  stroke="white" strokeWidth="1.5" strokeOpacity="0.75"
+                />
+              ))}
+              {Array.from({ length: totalRows - 1 }, (_, r) => (
+                <line
+                  key={`h${r}`}
+                  x1="0" y1={((r + 1) * cellH).toFixed(2)}
+                  x2="100" y2={((r + 1) * cellH).toFixed(2)}
+                  stroke="white" strokeWidth="1.5" strokeOpacity="0.75"
+                />
+              ))}
+            </svg>
+          );
+        })()}
+
+        {/* Drop zones — transparent, on top of SVG, for drag-and-drop */}
         {positions.map((pos, i) => {
           const slotId = `slot-${i}`;
           return (
@@ -154,15 +240,12 @@ function CenterBowl({ slots: slotsProp }: { slots?: Record<string, any> }) {
                 zIndex: 40,
               }}
             >
-              <BowlSlot id={slotId}>
-                <SlotContent ingredient={slots[slotId]} />
-              </BowlSlot>
+              <BowlSlot id={slotId} />
             </div>
           );
         })}
       </div>
 
-      {/* Info */}
       <div className="mt-6 text-center text-sm text-gray-600">
         <p>
           {selectedBowl
